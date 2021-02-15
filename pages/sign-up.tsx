@@ -24,7 +24,7 @@ const SignUp = (): React.ReactElement<{
 
     return (
         <>
-            <MetaData />
+            <MetaData page="sign-up" />
             <Form type="sign-up" />
         </>
     );

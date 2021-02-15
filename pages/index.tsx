@@ -10,7 +10,7 @@ const Home = (): React.ReactElement<{
     children: React.ReactNode;
 }, 'div'> => (
     <div>
-        <MetaData />
+        <MetaData page="about" />
         <Header page="about" />
         <Buttons />
         <About />
