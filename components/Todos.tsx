@@ -50,6 +50,27 @@ const Todos = ({ user }: TodosProps) => {
         setTodos(prevTodos => [...prevTodos, newTodoObj]);
     };
 
+    const updateTodo = (id: string, newName: string) => {
+        setTodos(prevTodos => prevTodos.map(todo => {
+            if (todo._id !== id) return todo;
+            return { ...todo, name: newName };
+        }));
+
+        fetch(`/api/todo/${id}?firebase_id=${user!.uid}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: newName })
+        });
+    };
+
+    const deleteTodo = (id: string) => {
+        setTodos(prevTodos => prevTodos.filter(todo => todo._id !== id));
+
+        fetch(`/api/todo/${id}?firebase_id=${user!.uid}`, {
+            method: 'DELETE'
+        });
+    };
+
     return (
         <div>
             <form onSubmit={addNewTodo}>
@@ -57,7 +78,7 @@ const Todos = ({ user }: TodosProps) => {
                 <button type="submit">Submit</button>
             </form>
             { todos.map(todo => (
-                <Todo key={todo._id} todo={todo} uid={user?.uid} />
+                <Todo key={todo._id} todo={todo} uid={user?.uid} updateTodo={updateTodo} deleteTodo={deleteTodo} />
             )) }
         </div>
     );
