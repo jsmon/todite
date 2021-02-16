@@ -48,7 +48,7 @@ const Form = ({ type }: {
     const showPasswordElement = useRef<HTMLButtonElement>(null);
 
     const signInWithGoogle = () => {
-        auth.signInWithPopup(provider as firebase.auth.GoogleAuthProvider);
+        auth.signInWithPopup(provider);
     };
 
     const formSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -72,9 +72,9 @@ const Form = ({ type }: {
         } else {
             const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
             const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
-            const lowercaseRegex = /[a-z]*/;
-            const uppercaseRegex = /[A-Z]*/;
-            const numberRegex = /[0-9]*/;
+            const lowercaseRegex = /.*[a-z].*/;
+            const uppercaseRegex = /.*[A-Z].*/;
+            const numberRegex = /.*[0-9].*/;
             if (!emailRegex.test(email)) {
                 setEmailMessage('Invalid email');
                 if (passwordRegex.test(password)) return;
@@ -82,13 +82,13 @@ const Form = ({ type }: {
             if (password.length < 8) {
                 setPasswordMessage('Password must be at least eight characters');
                 return;
-            } else if (lowercaseRegex.test(password)) {
-                setPasswordMessage('Password must include at least one lowercase');
+            } else if (!lowercaseRegex.test(password)) {
+                setPasswordMessage('Password must include at least one lowercase letter');
                 return;
-            } else if (uppercaseRegex.test(password)) {
+            } else if (!uppercaseRegex.test(password)) {
                 setPasswordMessage('Password must include at least one uppercase letter');
                 return;
-            } else if (numberRegex.test(password)) {
+            } else if (!numberRegex.test(password)) {
                 setPasswordMessage('Password must include at least one number');
                 return;
             }
