@@ -4,13 +4,15 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 
 import firebaseTypes from 'firebase/app';
 
-import MetaData from '../components/MetaData';
-
 import firebase from '../firebase';
 
+import MetaData from '../components/MetaData';
+import Header from '../components/Header';
 import Form from '../components/Form';
 
-const SignIn = () => {
+const SignIn = (): React.ReactElement<{
+    children: React.ReactNode;
+}, 'main'> => {
     const isSSR = typeof window === 'undefined';
 
     const auth = isSSR ? undefined : firebase.auth();
@@ -21,10 +23,11 @@ const SignIn = () => {
     }
 
     return (
-        <>
+        <main>
             <MetaData page="sign-in" />
+            <Header page="sign-in" />
             <Form type="sign-in" />
-        </>
+        </main>
     );
 };
 
