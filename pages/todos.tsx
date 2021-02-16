@@ -1,6 +1,6 @@
 import React from 'react';
 
-import firebaseTypes from 'firebase';
+import firebaseTypes from 'firebase/app';
 
 import { useAuthState } from 'react-firebase-hooks/auth';
 
@@ -16,15 +16,13 @@ const TodosPage = () => {
     if (!user) {
         if (!loading) {
             !isSSR && window.location.replace('/sign-in');
-            return null;
-        } else {
-            return (
-                <div>
-                    <Todos />
-                    <button>Sign Out</button>
-                </div>
-            );
         }
+        return (
+            <div>
+                <Todos />
+                <button>Sign Out</button>
+            </div>
+        );
     }
 
     const signOut = () => {
