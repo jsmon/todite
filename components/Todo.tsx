@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 
+import Swal from 'sweetalert2';
+
 import TodoObj from '../types/todo';
 
 interface TodoProps {
@@ -34,6 +36,23 @@ const Todo = ({ todo, uid, updateTodo, deleteTodo }: TodoProps) => {
         }
     };
 
+    const confirmDeleteTodo = async () => {
+        const choice = await Swal.fire({
+            showDenyButton: true,
+            denyButtonText: 'Yes, delete the todo.',
+            denyButtonColor: '#dd6b55',
+            confirmButtonText: 'No thanks.',
+            confirmButtonColor: '#3085d6',
+            icon: 'info',
+            title: 'Are you sure you want to delete this todo?',
+            text: 'It will be gone forever.'
+        });
+
+        if (choice.isDenied) {
+            deleteTodo(todo._id);
+        }
+    };
+
     useEffect(() => {
         fetch(`/api/todo/${todo._id}?firebase_id=${uid}`, {
             method: 'PATCH',
@@ -49,7 +68,7 @@ const Todo = ({ todo, uid, updateTodo, deleteTodo }: TodoProps) => {
             <input type="checkbox" onChange={handleChange} checked={todoCompleted} />
             <span ref={todoNameElement}>{ todo.name }</span>
             <button ref={editButton} onClick={editTodo}>Edit</button>
-            <button onClick={() => deleteTodo(todo._id)}>X</button>
+            <button onClick={confirmDeleteTodo}>X</button>
         </div>
     );
 };
