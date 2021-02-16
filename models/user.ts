@@ -1,11 +1,12 @@
 import * as mongoose from 'mongoose';
 
 interface IUser extends mongoose.Document {
+    firebaseId: string;
     apiKey: string;
 }
 
 const userSchema = new mongoose.Schema<IUser>({
-    _id: {
+    firebaseId: {
         type: String,
         required: true,
         unique: true
@@ -15,6 +16,6 @@ const userSchema = new mongoose.Schema<IUser>({
         required: true,
         unique: true
     }
-}, { _id: false });
+});
 
 export default <mongoose.Model<IUser>>mongoose.models.User || mongoose.model<IUser>('User', userSchema);
