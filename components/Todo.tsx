@@ -11,7 +11,9 @@ interface TodoProps {
     deleteTodo: (id: string) => void;
 }
 
-const Todo = ({ todo, uid, updateTodo, deleteTodo }: TodoProps) => {
+const Todo = ({ todo, uid, updateTodo, deleteTodo }: TodoProps): React.ReactElement<{
+    children: React.ReactNode;
+}, 'div'> => {
     const [todoCompleted, setTodoCompleted] = useState(todo.completed);
     const todoNameElement = useRef<HTMLSpanElement>(null);
     const editButton = useRef<HTMLButtonElement>(null);

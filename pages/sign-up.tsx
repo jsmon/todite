@@ -10,9 +10,7 @@ import firebase from '../firebase';
 
 import Form from '../components/Form';
 
-const SignUp = (): React.ReactElement<{
-    type: 'sign-up';
-}, typeof Form> => {
+const SignUp = () => {
     const isSSR = typeof window === 'undefined';
 
     const auth = isSSR ? undefined : firebase.auth();

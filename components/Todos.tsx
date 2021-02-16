@@ -10,7 +10,9 @@ interface TodosProps {
     user?: firebase.User;
 }
 
-const Todos = ({ user }: TodosProps) => {
+const Todos = ({ user }: TodosProps): React.ReactElement<{
+    children: React.ReactNode;
+}, 'div'> => {
     const [todos, setTodos] = useState<TodoObj[]>([]);
     const [newTodo, setNewTodo] = useState('');
     const newTodoElement = useRef<HTMLInputElement>(null);
