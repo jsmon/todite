@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 
 import TodoObj from '../types/todo';
 
-import firebase from 'firebase';
+import firebase from 'firebase/app';
 
 import Todo from './Todo';
 
@@ -17,7 +17,7 @@ const Todos = ({ user }: TodosProps) => {
 
     useEffect(() => {
         if (!user) return;
-        console.log(user.uid);
+
         (async () => {
             let data = await fetch(`/api/todos?firebase_id=${user.uid}`).then(res => res.json());
             if (!Array.isArray(data) && data.error) {
