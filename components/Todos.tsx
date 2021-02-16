@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 import TodoObj from '../types/todo';
 
@@ -12,6 +12,8 @@ interface TodosProps {
 
 const Todos = ({ user }: TodosProps) => {
     const [todos, setTodos] = useState<TodoObj[]>([]);
+    const [newTodo, setNewTodo] = useState('');
+    const newTodoElement = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         if (!user) return;
@@ -30,8 +32,30 @@ const Todos = ({ user }: TodosProps) => {
         })();
     }, [user]);
 
+    const updateNewTodo = () => {
+        const newTodoText = newTodoElement.current!.value;
+        setNewTodo(newTodoText);
+    };
+
+    const addNewTodo = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        const newTodoObj: TodoObj = await fetch(`/api/todos?firebase_id=${user!.uid}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: newTodo })
+        }).then(res => res.json());
+
+        setNewTodo('');
+        setTodos(prevTodos => [...prevTodos, newTodoObj]);
+    };
+
     return (
         <div>
+            <form onSubmit={addNewTodo}>
+                <input ref={newTodoElement} type="text" name="new-todo" id="new-todo" placeholder="New Todo" value={newTodo} onChange={updateNewTodo} />
+                <button type="submit">Submit</button>
+            </form>
             { todos.map(todo => (
                 <Todo key={todo._id} todo={todo} uid={user?.uid} />
             )) }
