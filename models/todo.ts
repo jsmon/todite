@@ -1,12 +1,12 @@
 import * as mongoose from 'mongoose';
 
-import Todo from '../types/todo';
-
-interface ITodo extends Todo, mongoose.Document {
+export interface ITodo extends mongoose.Document {
+    name: string;
+    completed: boolean;
     user: string;
 }
 
-export const todoSchema = new mongoose.Schema<ITodo>({
+const todoSchema = new mongoose.Schema<ITodo>({
     name: {
         type: String,
         required: true
@@ -21,4 +21,4 @@ export const todoSchema = new mongoose.Schema<ITodo>({
     }
 });
 
-export default <mongoose.Model<ITodo>>mongoose.models.Todo || mongoose.model<ITodo>('Todo', todoSchema);
+export default todoSchema;

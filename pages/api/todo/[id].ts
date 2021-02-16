@@ -2,11 +2,12 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 import * as mongoose from 'mongoose';
 
-import Todo from '../../../models/todo';
+import todoSchema, { ITodo } from '../../../models/todo';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-    mongoose.connect(process.env.TODO_DATABASE_URL!, { useNewUrlParser: true, useUnifiedTopology: true });
-    mongoose.set('useCreateIndex', true);
+    const todoConnection = mongoose.createConnection(process.env.TODO_DATABASE_URL!, { useNewUrlParser: true, useUnifiedTopology: true });
+    todoConnection.set('useCreateIndex', true);
+    const Todo: mongoose.Model<ITodo> = todoConnection.models.Todo || todoConnection.model('Todo', todoSchema);
 
     const method = req.method || 'GET';
 
