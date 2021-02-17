@@ -4,36 +4,41 @@ import Link from 'next/link';
 
 import firebase from '../firebase';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+
 const isSSR = typeof window === 'undefined';
 
-const Form = ({ type }: {
+interface FormProps {
     type: 'sign-in' | 'sign-up';
-}): React.ReactElement<{
+}
+
+const Form = ({ type }: FormProps): React.ReactElement<{
     children: React.ReactNode;
     onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+    className: string;
 }, 'form'> => {
     if (isSSR) {
         return (
-            <form>
-                <br />
-                <input type="email" name="email" id="email" autoComplete="email" placeholder="Email" />
-                <br />
-                <p id="email-message"></p>
-                <br />
-                <input type="password" name="password" id="password" autoComplete={type === 'sign-in' ? 'current-password' : 'new-password'} placeholder="Password" />
-                <button id="show-password-button" type="button">Show</button>
-                <br />
-                <p id="password-message"></p>
-                <br />
-                <button type="submit">Submit</button>
-                <br /><br />
-                <button type="button">
-                    Sign {type === 'sign-in' ? 'in' : 'up'} with Google
-                </button>
-                <br /><br />
-                <p>
-                    {type === 'sign-in' ? "Don't" : 'Already'} have an account? Click <Link href={type === 'sign-in' ? '/sign-up' : '/sign-in'}><a>here</a></Link> to sign {type === 'sign-in' ? 'up' : 'in'}
-                </p>
+            <form className="mt-8 max-w-md px-2 m-auto">
+                <div className="grid grid-cols-1 gap-6">
+                    <label className="block">
+                        <span className="text-gray-700 dark:text-gray-300">Email Address</span>
+                        <input className="mt-1 block w-full dark:bg-gray-700" type="email" name="email" id="email" autoComplete="email" placeholder="Email Address" />
+                    </label>
+                    <p id="email-message"></p>
+                    <label className="block">
+                        <span className="text-gray-700 block dark:text-gray-300">Password</span>
+                        <div className="password-container flex">
+                            <input className="mt-1 w-full flex-none dark:bg-gray-700" type="password" name="password" id="password" autoComplete={type === 'sign-in' ? 'current-password' : 'new-password'} placeholder="Password" />
+                            <i className="flex-1 -ml-7 mt-2 text-xl cursor-pointer"><FontAwesomeIcon icon={faEye} /></i>
+                        </div>
+                    </label>
+                    <p id="password-message"></p>
+                    <button type="button" className="block py-2 px-4 font-semibold rounded-lg shadow-md text-white bg-gray-600 hover:bg-gray-500 dark:hover:bg-gray-800">Sign {type === 'sign-in' ? 'in' : 'up'} with Google</button>
+                    <button type="submit" className="block py-2 px-4 font-semibold rounded-lg shadow-md text-white bg-gray-600 hover:bg-gray-500 dark:hover:bg-gray-800">Submit</button>
+                    <p>{type === 'sign-in' ? "Don't" : 'Already'} have an account? Click <Link href={type === 'sign-in' ? '/sign-up' : '/sign-in'}><a className="text-blue-600 hover:underline">here</a></Link> to sign {type === 'sign-in' ? 'up' : 'in'}</p>
+                </div>
             </form>
         );
     }
@@ -43,9 +48,9 @@ const Form = ({ type }: {
 
     const [emailMessage, setEmailMessage] = useState('');
     const [passwordMessage, setPasswordMessage] = useState('');
+    const [eyeType, setEyeType] = useState(faEye);
     const emailElement = useRef<HTMLInputElement>(null);
     const passwordElement = useRef<HTMLInputElement>(null);
-    const showPasswordElement = useRef<HTMLButtonElement>(null);
 
     const signInWithGoogle = () => {
         auth.signInWithPopup(provider);
@@ -109,30 +114,33 @@ const Form = ({ type }: {
         const passwordInput = passwordElement.current!;
         if (passwordInput.type === 'password') {
             passwordInput.type = 'text';
-            showPasswordElement.current!.innerText = 'Hide';
+            setEyeType(faEyeSlash);
         } else {
             passwordInput.type = 'password';
-            showPasswordElement.current!.innerText = 'Show';
+            setEyeType(faEye);
         }
     };
 
     return (
-        <form onSubmit={formSubmit}>
-            <br />
-            <input ref={emailElement} type="email" name="email" id="email" autoComplete="email" placeholder="Email" />
-            <br />
-            <p id="email-message">{emailMessage}</p>
-            <br />
-            <input ref={passwordElement} type="password" name="password" id="password" autoComplete={type === 'sign-in' ? 'current-password' : 'new-password'} placeholder="Password" />
-            <button ref={showPasswordElement} id="show-password-button" type="button" onClick={setPasswordVisibilty}>Show</button>
-            <br />
-            <p id="password-message">{passwordMessage}</p>
-            <br />
-            <button type="submit">Submit</button>
-            <br /><br />
-            <button type="button" onClick={signInWithGoogle}>Sign {type === 'sign-in' ? 'in' : 'up'} with Google</button>
-            <br /><br />
-            <p>{type === 'sign-in' ? "Don't" : 'Already'} have an account? Click <Link href={type === 'sign-in' ? '/sign-up' : '/sign-in'}><a>here</a></Link> to sign {type === 'sign-in' ? 'up' : 'in'}</p>
+        <form onSubmit={formSubmit} className="mt-8 max-w-md px-2 m-auto">
+            <div className="grid grid-cols-1 gap-6">
+                <label className="block">
+                    <span className="text-gray-700 dark:text-gray-300">Email Address</span>
+                    <input className="mt-1 block w-full dark:bg-gray-700" ref={emailElement} type="email" name="email" id="email" autoComplete="email" placeholder="Email Address" />
+                </label>
+                <p id="email-message">{emailMessage}</p>
+                <label className="block">
+                    <span className="text-gray-700 block dark:text-gray-300">Password</span>
+                    <div className="password-container flex">
+                        <input className="mt-1 w-full flex-none dark:bg-gray-700" ref={passwordElement} type="password" name="password" id="password" autoComplete={type === 'sign-in' ? 'current-password' : 'new-password'} placeholder="Password" />
+                        <i className="flex-1 -ml-7 mt-2 text-xl cursor-pointer" onClick={setPasswordVisibilty}><FontAwesomeIcon icon={eyeType} /></i>
+                    </div>
+                </label>
+                <p id="password-message">{passwordMessage}</p>
+                <button type="button" className="block py-2 px-4 font-semibold rounded-lg shadow-md text-white bg-gray-600 hover:bg-gray-500 dark:hover:bg-gray-800" onClick={signInWithGoogle}>Sign {type === 'sign-in' ? 'in' : 'up'} with Google</button>
+                <button type="submit" className="block py-2 px-4 font-semibold rounded-lg shadow-md text-white bg-gray-600 hover:bg-gray-500 dark:hover:bg-gray-800">Submit</button>
+                <p>{type === 'sign-in' ? "Don't" : 'Already'} have an account? Click <Link href={type === 'sign-in' ? '/sign-up' : '/sign-in'}><a className="text-blue-600 hover:underline">here</a></Link> to sign {type === 'sign-in' ? 'up' : 'in'}</p>
+            </div>
         </form>
     );
 };

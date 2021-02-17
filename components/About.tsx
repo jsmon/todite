@@ -2,9 +2,9 @@ import React from 'react';
 
 const About = (): React.ReactElement<{
     children: React.ReactNode;
-    className: 'about';
+    className: string;
 }, 'section'> => (
-    <section className="about">
+    <section className="about p-2">
         <p>Todo List is a simple app that lets you keep track of what you need to do.</p>
     </section>
 );

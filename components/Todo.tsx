@@ -6,13 +6,14 @@ import TodoObj from '../types/todo';
 
 interface TodoProps {
     todo: TodoObj;
-    uid?: string;
-    updateTodo: (id: string, newName: string) => void;
+    updateTodoName: (id: string, newName: string) => void;
+    updateTodoCompleted: (id: string, completed: boolean) => void;
     deleteTodo: (id: string) => void;
 }
 
-const Todo = ({ todo, uid, updateTodo, deleteTodo }: TodoProps): React.ReactElement<{
+const Todo = ({ todo, updateTodoName, updateTodoCompleted, deleteTodo }: TodoProps): React.ReactElement<{
     children: React.ReactNode;
+    className: string;
 }, 'div'> => {
     const [todoCompleted, setTodoCompleted] = useState(todo.completed);
     const todoNameElement = useRef<HTMLSpanElement>(null);
@@ -29,7 +30,7 @@ const Todo = ({ todo, uid, updateTodo, deleteTodo }: TodoProps): React.ReactElem
 
             editButton.current!.innerText = 'Edit';
 
-            updateTodo(todo._id, newTodoName);
+            updateTodoName(todo._id, newTodoName);
         } else {
             todoNameElement.current!.contentEditable = 'true';
             todoNameElement.current!.focus();
@@ -56,21 +57,15 @@ const Todo = ({ todo, uid, updateTodo, deleteTodo }: TodoProps): React.ReactElem
     };
 
     useEffect(() => {
-        fetch(`/api/todo/${todo._id}?firebase_id=${uid}`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ completed: todoCompleted })
-        });
+        updateTodoCompleted(todo._id, todoCompleted);
     }, [todoCompleted]);
 
     return (
-        <div>
+        <div className="todo px-2 py-1">
             <input type="checkbox" onChange={handleChange} checked={todoCompleted} />
-            <span ref={todoNameElement}>{ todo.name }</span>
-            <button ref={editButton} onClick={editTodo}>Edit</button>
-            <button onClick={confirmDeleteTodo}>X</button>
+            <span ref={todoNameElement} className={`px-1${todo.completed ? ' line-through' : ''}`}>{ todo.name }</span>
+            <button ref={editButton} onClick={editTodo} className="p-2 mx-2 font-semibold rounded-lg shadow-md text-white bg-gray-600 hover:bg-gray-500 dark:hover:bg-gray-800">Edit</button>
+            <button onClick={confirmDeleteTodo} className="py-1 px-2 mx-2 font-semibold rounded-lg shadow-md text-white bg-red-600 hover:bg-red-500 dark:hover:bg-red-800">X</button>
         </div>
     );
 };

@@ -21,15 +21,29 @@ const Todos = ({ user }: TodosProps): React.ReactElement<{
         if (!user) return;
 
         (async () => {
-            let data = await fetch(`/api/todos?firebase_id=${user.uid}`).then(res => res.json());
-            if (!Array.isArray(data) && data.error) {
+            let data: TodoObj[] = await fetch(`/api/todos?firebase_id=${user.uid}`).then(res => res.json());
+            if (!Array.isArray(data) && (data as {
+                error?: {
+                    status: number;
+                    message: string;
+                };
+            }).error) {
                 await fetch('/api/user', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ firebaseId: user.uid })
                 });
+
                 data = [];
             }
+            data.sort((a, b) => {
+                if (!a.completed && b.completed) {
+                    return -1;
+                } else if (a.completed && !b.completed) {
+                    return 1;
+                }
+                return 0;
+            });
             setTodos(data);
         })();
     }, [user]);
@@ -49,10 +63,17 @@ const Todos = ({ user }: TodosProps): React.ReactElement<{
         }).then(res => res.json());
 
         setNewTodo('');
-        setTodos(prevTodos => [...prevTodos, newTodoObj]);
+        setTodos(prevTodos => [...prevTodos, newTodoObj].sort((a, b) => {
+            if (!a.completed && b.completed) {
+                return -1;
+            } else if (a.completed && !b.completed) {
+                return 1;
+            }
+            return 0;
+        }));
     };
 
-    const updateTodo = (id: string, newName: string) => {
+    const updateTodoName = (id: string, newName: string) => {
         setTodos(prevTodos => prevTodos.map(todo => {
             if (todo._id !== id) return todo;
             return { ...todo, name: newName };
@@ -65,6 +86,25 @@ const Todos = ({ user }: TodosProps): React.ReactElement<{
         });
     };
 
+    const updateTodoCompleted = (id: string, completed: boolean) => {
+        fetch(`/api/todo/${id}?firebase_id=${user!.uid}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ completed })
+        });
+
+        setTodos(prevTodos => prevTodos.map(todo => todo._id === id ? { ...todo, completed } : todo).sort((a, b) => {
+            if (!a.completed && b.completed) {
+                return -1;
+            } else if (a.completed && !b.completed) {
+                return 1;
+            }
+            return 0;
+        }));
+    };
+
     const deleteTodo = (id: string) => {
         setTodos(prevTodos => prevTodos.filter(todo => todo._id !== id));
 
@@ -75,13 +115,15 @@ const Todos = ({ user }: TodosProps): React.ReactElement<{
 
     return (
         <div>
-            <form onSubmit={addNewTodo}>
-                <input ref={newTodoElement} type="text" name="new-todo" id="new-todo" placeholder="New Todo" value={newTodo} onChange={updateNewTodo} />
-                <button type="submit">Submit</button>
+            <form onSubmit={addNewTodo} className="p-2">
+                <input ref={newTodoElement} type="text" name="new-todo" id="new-todo" placeholder="New Todo" value={newTodo} onChange={updateNewTodo} className="mt-1 dark:bg-gray-700" />
+                <button type="submit" className="p-2 mx-2 font-semibold rounded-lg shadow-md text-white bg-gray-600 hover:bg-gray-500 dark:hover:bg-gray-800">Submit</button>
             </form>
-            { todos.map(todo => (
-                <Todo key={todo._id} todo={todo} uid={user?.uid} updateTodo={updateTodo} deleteTodo={deleteTodo} />
-            )) }
+            <div className="todos">
+                { todos.map(todo => (
+                    <Todo key={todo._id} todo={todo} updateTodoName={updateTodoName} updateTodoCompleted={updateTodoCompleted} deleteTodo={deleteTodo} />
+                )) }
+            </div>
         </div>
     );
 };

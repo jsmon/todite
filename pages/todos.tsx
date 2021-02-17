@@ -26,7 +26,7 @@ const TodosPage = (): React.ReactElement<{
                 <MetaData page="todos" />
                 <Header page="todos" />
                 <Todos />
-                <button>Sign Out</button>
+                <button className="p-2 mx-2 font-semibold rounded-lg shadow-md text-white bg-gray-600 hover:bg-gray-500 dark:hover:bg-gray-800">Sign Out</button>
             </div>
         );
     }
@@ -40,7 +40,7 @@ const TodosPage = (): React.ReactElement<{
             <MetaData page="todos" />
             <Header page="todos" />
             <Todos user={user} />
-            <button onClick={signOut}>Sign Out</button>
+            <button onClick={signOut} className="p-2 mx-2 font-semibold rounded-lg shadow-md text-white bg-gray-600 hover:bg-gray-500 dark:hover:bg-gray-800">Sign Out</button>
         </div>
     ); 
 };
