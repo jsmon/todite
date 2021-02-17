@@ -63,7 +63,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         } = req.body;
 
         if (todo.user === uid) {
-            const newTodo = await todo.update({ name, completed });
+            const newTodo = await todo.updateOne({ name, completed });
             res.json(newTodo);
         } else {
             res.status(403).json({ error: { status: 403, message: 'You can only access your own todos' } });
