@@ -4,6 +4,7 @@ import * as mongoose from 'mongoose';
 import { v4 as uuid } from 'uuid';
 
 import userSchema, { IUser } from '../../models/user';
+import { ITodo } from '../../models/todo';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const userConnection = mongoose.createConnection(process.env.USER_DATABASE_URL!, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -67,6 +68,31 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         const apiKey = uuid();
 
         const user = await User.create({ apiKey, firebaseId });
+
+        const firstTodo: ITodo = await fetch(`${process.env.NODE_ENV === 'production' ? 'https://todolist.vercel.app' : 'http://localhost:3000'}/api/todos?api_key=${apiKey}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name: 'Create an account on Todo List' })
+        }).then(res => res.json());
+
+        await fetch(`${process.env.NODE_ENV === 'production' ? 'https://todolist.vercel.app' : 'http://localhost:3000'}/api/todo/${firstTodo._id}?api_key=${apiKey}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ completed: true })
+        });
+
+        await fetch(`${process.env.NODE_ENV === 'production' ? 'https://todolist.vercel.app' : 'http://localhost:3000'}/api/todos?api_key=${apiKey}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name: 'Create your first todo' })
+        });
+
         res.json(user);
     } else {
         res.setHeader('Access-Control-Allow-Methods', ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']);

@@ -34,7 +34,7 @@ const Todos = ({ user }: TodosProps): React.ReactElement<{
                     body: JSON.stringify({ firebaseId: user.uid })
                 });
 
-                data = [];
+                data = await fetch(`/api/todos?firebase_id=${user.uid}`).then(res => res.json());
             }
             data.sort((a, b) => {
                 if (!a.completed && b.completed) {
