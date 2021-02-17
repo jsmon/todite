@@ -31,7 +31,7 @@ const Form = ({ type }: FormProps): React.ReactElement<{
                         <span className="text-gray-700 block dark:text-gray-300">Password</span>
                         <div className="password-container flex">
                             <input className="mt-1 w-full flex-none dark:bg-gray-700" type="password" name="password" id="password" autoComplete={type === 'sign-in' ? 'current-password' : 'new-password'} placeholder="Password" />
-                            <i className="flex-1 -ml-7 mt-2 text-xl cursor-pointer"><FontAwesomeIcon icon={faEye} /></i>
+                            <i className="flex-1 -ml-7 mt-3 text-xl cursor-pointer"><FontAwesomeIcon icon={faEye} /></i>
                         </div>
                     </label>
                     <p id="password-message"></p>
@@ -133,7 +133,7 @@ const Form = ({ type }: FormProps): React.ReactElement<{
                     <span className="text-gray-700 block dark:text-gray-300">Password</span>
                     <div className="password-container flex">
                         <input className="mt-1 w-full flex-none dark:bg-gray-700" ref={passwordElement} type="password" name="password" id="password" autoComplete={type === 'sign-in' ? 'current-password' : 'new-password'} placeholder="Password" />
-                        <i className="flex-1 -ml-7 mt-2 text-xl cursor-pointer" onClick={setPasswordVisibilty}><FontAwesomeIcon icon={eyeType} /></i>
+                        <i className="flex-1 -ml-7 mt-3 text-xl cursor-pointer" onClick={setPasswordVisibilty}><FontAwesomeIcon icon={eyeType} /></i>
                     </div>
                 </label>
                 <p id="password-message">{passwordMessage}</p>
