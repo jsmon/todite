@@ -32,7 +32,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             status: number;
             message: string;
         };
-    } = await fetch(process.env.NODE_ENV === 'production' ? `https://todolist.jsmon.vercel.app/api/user${queryString}` : `http://localhost:3000/api/user${queryString}`).then(res => res.json());
+    } = await fetch(process.env.NODE_ENV === 'production' ? `https://todite.now.sh/api/user${queryString}` : `http://localhost:3000/api/user${queryString}`).then(res => res.json());
     if (user.error) {
         return res.status(403).json({ error: { status: 403, message: 'Invalid API Key' } });
     }
