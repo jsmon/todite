@@ -5,7 +5,7 @@ const About = (): React.ReactElement<{
     className: string;
 }, 'section'> => (
     <section className="about p-2">
-        <p>Todo List is a simple app that lets you keep track of what you need to do.</p>
+        <p>Todite is a simple free to-do list app that helps you organise your day.</p>
     </section>
 );
 

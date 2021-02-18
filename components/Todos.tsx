@@ -116,7 +116,7 @@ const Todos = ({ user }: TodosProps): React.ReactElement<{
     return (
         <div>
             <form onSubmit={addNewTodo} className="p-2">
-                <input ref={newTodoElement} type="text" name="new-todo" id="new-todo" placeholder="New Todo" value={newTodo} onChange={updateNewTodo} className="mt-1 dark:bg-gray-700" />
+                <input ref={newTodoElement} type="text" name="new-todo" id="new-todo" placeholder="New To-do" value={newTodo} onChange={updateNewTodo} className="mt-1 dark:bg-gray-700" />
                 <button type="submit" className="p-2 mx-2 font-semibold rounded-lg shadow-md text-white bg-gray-600 hover:bg-gray-500 dark:hover:bg-gray-800">Submit</button>
             </form>
             <div className="todos">

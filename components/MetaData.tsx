@@ -8,12 +8,12 @@ interface MetaDataProps {
 
 const MetaData = ({ page }: MetaDataProps) => (
     <Head>
-        <title>{ page === 'about' || page === 'todos' ? 'TodoList' : `TodoList | Sign ${page === 'sign-in' ? 'In' : 'Up'}` }</title>
+        <title>{ page === 'about' || page === 'todos' ? 'Todite' : `Todite | Sign ${page === 'sign-in' ? 'In' : 'Up'}` }</title>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="keywords" content="todo, todo list, todolist, todo-list, todo-app" />
-        <meta name="description" content="TodoList is a simple app that lets you keep track of what you need to do." />
-        <meta name="subject" content="Todolist App" />
+        <meta name="keywords" content="todite, todo, to-do, todo list, to-do list, todolist, todo-list, todo-app" />
+        <meta name="description" content="Todite is a simple free to-do list app that helps you organise your day" />
+        <meta name="subject" content="To-do list App" />
         <meta name="language" content="en" />
         <meta name="author" content="James Simon, jsmon.dev@gmail.com" />
         <meta name="designer" content="James Simon, jsmon.dev@gmail.com" />
@@ -22,7 +22,7 @@ const MetaData = ({ page }: MetaDataProps) => (
         <meta name="url" content="https://todite.now.sh/" />
         <meta name="identifier-URL" content="https://todite.now.sh/" />
 
-        <meta property="og:title" content="James Simon" />
+        <meta property="og:title" content="Todite" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://todite.now.sh/" />
         <meta property="og:image" content="https://todite.now.sh/icons/manifest-icon-192.png" />
@@ -31,9 +31,9 @@ const MetaData = ({ page }: MetaDataProps) => (
         <meta property="og:image:type" content="image/png" />
         <meta property="og:image:width" content="192" />
         <meta property="og:image:height" content="192" />
-        <meta property="og:image:alt" content="Three lines with ticks and crosses next to each other, representing a todo list." />
-        <meta property="og:site_name" content="James Simon" />
-        <meta property="og:description" content="TodoList is a simple app that lets you keep track of what you need to do." />
+        <meta property="og:image:alt" content="Three lines with ticks and crosses next to each other, representing a to-do list." />
+        <meta property="og:site_name" content="Todite" />
+        <meta property="og:description" content="Todite is a simple free to-do list app that helps you organise your day" />
         <meta property="og:email" content="jsmon.dev@gmail.com" />
         <meta property="og:locale" content="en_GB" />
         <meta property="og:country-name" content="United Kingdom" />

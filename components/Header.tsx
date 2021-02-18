@@ -9,7 +9,7 @@ const Header = ({ page }: HeaderProps): React.ReactElement<{
     className: string;
 }, 'header'> => (
     <header className="text-5xl text-center font-bold p-3.5">
-        <h1>{ page === 'about' ? 'Todo List' : (page === 'todos' ? 'Todos' : (page === 'sign-in' ? 'Sign In to Todo List' : 'Sign Up for Todo List')) }</h1>
+        <h1>{ page === 'about' || page === 'todos' ? 'Todite' : (page === 'sign-in' ? 'Sign In to Todite' : 'Sign Up for Todite') }</h1>
     </header>
 );
 

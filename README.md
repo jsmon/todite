@@ -1,4 +1,4 @@
-# Todo List
-This is a todolist app that lets you keep track of what you need to do.
+# Todite
+Todite is a simple free to-do list app that helps you organise your day.
 
-I will think of a name eventually.
+You can check it out at [todite.now.sh](https://todite.now.sh/)

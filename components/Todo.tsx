@@ -42,12 +42,12 @@ const Todo = ({ todo, updateTodoName, updateTodoCompleted, deleteTodo }: TodoPro
     const confirmDeleteTodo = async () => {
         const choice = await Swal.fire({
             showDenyButton: true,
-            denyButtonText: 'Yes, delete the todo.',
+            denyButtonText: 'Yes, delete the to-do.',
             denyButtonColor: '#dd6b55',
             confirmButtonText: 'No thanks.',
             confirmButtonColor: '#3085d6',
             icon: 'info',
-            title: 'Are you sure you want to delete this todo?',
+            title: 'Are you sure you want to delete this to-do?',
             text: 'It will be gone forever.'
         });
 

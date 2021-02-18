@@ -74,7 +74,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ name: 'Create an account on Todo List' })
+            body: JSON.stringify({ name: 'Create an account on Todite' })
         }).then(res => res.json());
 
         await fetch(`${process.env.NODE_ENV === 'production' ? 'https://todite.now.sh' : 'http://localhost:3000'}/api/todo/${firstTodo._id}?api_key=${apiKey}`, {
@@ -90,7 +90,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ name: 'Create your first todo' })
+            body: JSON.stringify({ name: 'Create your first to-do' })
         });
 
         res.json(user);

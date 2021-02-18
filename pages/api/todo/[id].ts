@@ -44,17 +44,17 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (method === 'GET') {
         const todo = await Todo.findById(id);
         if (todo == null) {
-            return res.status(404).json({ error: { status: 404, message: `A todo with id "${id}" could not be found` } });
+            return res.status(404).json({ error: { status: 404, message: `A to-do with id "${id}" could not be found` } });
         }
         if (todo.user === uid) {
             res.json(todo);
         } else {
-            res.status(403).json({ error: { status: 403, message: 'You can only access your own todos' } });
+            res.status(403).json({ error: { status: 403, message: 'You can only access your own to-dos' } });
         }
     } else if (['PUT', 'PATCH'].includes(method)) {
         const todo = await Todo.findById(id);
         if (todo == null) {
-            return res.status(404).json({ error: { status: 404, message: `A todo with id "${id}" could not be found` } })
+            return res.status(404).json({ error: { status: 404, message: `A to-do with id "${id}" could not be found` } })
         }
 
         const { name = todo.name, completed = todo.completed }: {
@@ -66,18 +66,18 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             const newTodo = await todo.updateOne({ name, completed });
             res.json(newTodo);
         } else {
-            res.status(403).json({ error: { status: 403, message: 'You can only access your own todos' } });
+            res.status(403).json({ error: { status: 403, message: 'You can only access your own to-dos' } });
         }
     } else if (method === 'DELETE') {
         const todo = await Todo.findById(id);
         if (todo == null) {
-            return res.status(404).json({ error: { status: 404, message: `A todo with id "${id}" could not be found` } })
+            return res.status(404).json({ error: { status: 404, message: `A to-do with id "${id}" could not be found` } })
         }
 
         if (todo.user === uid) {
             todo.delete().then(() => res.status(200).end());
         } else {
-            res.status(403).json({ error: { status: 403, message: 'You can only access your own todos' } });
+            res.status(403).json({ error: { status: 403, message: 'You can only access your own to-dos' } });
         }
     } else {
         res.setHeader('Access-Control-Allow-Methods', ['GET', 'PUT', 'PATCH', 'DELETE']);
