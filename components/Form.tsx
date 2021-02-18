@@ -21,6 +21,7 @@ const Form = ({ type }: FormProps): React.ReactElement<{
     if (isSSR) {
         return (
             <form className="mt-8 max-w-md px-2 m-auto">
+                <img className="sign-in-with-google min-w-10 m-auto cursor-pointer" src="/sign-in-with-google.png" alt="Sign in With Google" />
                 <div className="grid grid-cols-1 gap-6">
                     <label className="block">
                         <span className="text-gray-700 dark:text-gray-300">Email Address</span>
@@ -35,7 +36,6 @@ const Form = ({ type }: FormProps): React.ReactElement<{
                         </div>
                     </label>
                     <p id="password-message"></p>
-                    <button type="button" className="block py-2 px-4 font-semibold rounded-lg shadow-md text-white bg-gray-600 hover:bg-gray-500 dark:hover:bg-gray-800">Sign {type === 'sign-in' ? 'in' : 'up'} with Google</button>
                     <button type="submit" className="block py-2 px-4 font-semibold rounded-lg shadow-md text-white bg-gray-600 hover:bg-gray-500 dark:hover:bg-gray-800">Submit</button>
                     <p>{type === 'sign-in' ? "Don't" : 'Already'} have an account? Click <Link href={type === 'sign-in' ? '/sign-up' : '/sign-in'}><a className="text-blue-600 hover:underline">here</a></Link> to sign {type === 'sign-in' ? 'up' : 'in'}</p>
                 </div>
@@ -123,6 +123,7 @@ const Form = ({ type }: FormProps): React.ReactElement<{
 
     return (
         <form onSubmit={formSubmit} className="mt-8 max-w-md px-2 m-auto">
+            <img onClick={signInWithGoogle} className="sign-in-with-google min-w-10 m-auto cursor-pointer" src="/sign-in-with-google.png" alt="Sign in With Google" />
             <div className="grid grid-cols-1 gap-6">
                 <label className="block">
                     <span className="text-gray-700 dark:text-gray-300">Email Address</span>
@@ -137,7 +138,6 @@ const Form = ({ type }: FormProps): React.ReactElement<{
                     </div>
                 </label>
                 <p id="password-message">{passwordMessage}</p>
-                <button type="button" className="block py-2 px-4 font-semibold rounded-lg shadow-md text-white bg-gray-600 hover:bg-gray-500 dark:hover:bg-gray-800" onClick={signInWithGoogle}>Sign {type === 'sign-in' ? 'in' : 'up'} with Google</button>
                 <button type="submit" className="block py-2 px-4 font-semibold rounded-lg shadow-md text-white bg-gray-600 hover:bg-gray-500 dark:hover:bg-gray-800">Submit</button>
                 <p>{type === 'sign-in' ? "Don't" : 'Already'} have an account? Click <Link href={type === 'sign-in' ? '/sign-up' : '/sign-in'}><a className="text-blue-600 hover:underline">here</a></Link> to sign {type === 'sign-in' ? 'up' : 'in'}</p>
             </div>
