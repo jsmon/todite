@@ -80,7 +80,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         }
 
         if (todo.user === uid) {
-            todo.delete().then(() => res.status(200).end());
+            todo.delete().then(() => res.status(200).json({ success: true }));
         } else {
             res.status(403).json({ error: { status: 403, message: 'You can only access your own to-dos' } });
         }

@@ -79,7 +79,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 });
             }
 
-            user.delete().then(res.json({ success: true }));
+            user.delete().then(() => res.json({ success: true }));
         } catch (err) {
             res.status(404).json({ error: { status: 404, message: 'The user could not be found' } });
         }
@@ -87,7 +87,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         const { firebaseId }: {
             firebaseId?: string;
         } = req.body;
-        let settings = req.body.settings as Settings | undefined;
+        let settings: Settings | undefined = req.body.settings;
 
         if (settings && !settings.syncSettings) settings = undefined;
 

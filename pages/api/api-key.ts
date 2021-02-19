@@ -51,7 +51,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             const user = await User.findOne(hasApiKey ? { apiKey } : { firebaseId });
             if (user == null) throw new Error('User not found');
 
-            user.updateOne({ apiKey: newApiKey });
+            await user.updateOne({ apiKey: newApiKey });
+
+            res.json({ apiKey: newApiKey });
         } catch (err) {
             res.status(404).json({ error: { status: 404, message: 'The user could not be found' } });
         }
