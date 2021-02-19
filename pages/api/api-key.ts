@@ -1,11 +1,16 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
+import runMiddleware from '../../utils/run-middleware';
+
 import * as mongoose from 'mongoose';
 import { v4 as uuid } from 'uuid';
+import cors from 'cors';
 
 import userSchema, { IUser } from '../../models/user';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+    await runMiddleware(req, res, cors());
+
     const userConnection = mongoose.createConnection(process.env.USER_DATABASE_URL!, { useNewUrlParser: true, useUnifiedTopology: true });
     userConnection.set('useCreateIndex', true);
     const User: mongoose.Model<IUser> = userConnection.models.User || userConnection.model('User', userSchema);

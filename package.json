@@ -12,6 +12,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.2",
     "@fortawesome/react-fontawesome": "^0.1.14",
     "@tailwindcss/forms": "^0.2.1",
+    "cors": "^2.8.5",
     "firebase": "^8.2.7",
     "mongoose": "^5.11.16",
     "next": "10.0.6",
@@ -23,6 +24,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.10",
     "@types/mongoose": "^5.10.3",
     "@types/node": "^14.14.27",
     "@types/react": "^17.0.2",
