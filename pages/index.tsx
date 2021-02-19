@@ -3,7 +3,7 @@ import React from 'react';
 import firebaseTypes from 'firebase/app';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
-import firebase from '../firebase';
+import firebase from '../utils/firebase';
 
 import MetaData from '../components/MetaData';
 import Header from '../components/Header';
