@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 
 import Link from 'next/link';
 
-import firebase from '../firebase';
+import firebase from '../utils/firebase';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';

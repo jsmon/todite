@@ -4,7 +4,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 
 import firebaseTypes from 'firebase/app';
 
-import firebase from '../firebase';
+import firebase from '../utils/firebase';
 
 import MetaData from '../components/MetaData';
 import Header from '../components/Header';
