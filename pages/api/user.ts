@@ -1,16 +1,23 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
+import runMiddleware from '../../utils/run-middleware';
+
 import * as mongoose from 'mongoose';
 import { v4 as uuid } from 'uuid';
+import cors from 'cors';
+
+import Settings from '../../types/settings';
 
 import userSchema, { IUser } from '../../models/user';
 import { ITodo } from '../../models/todo';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+    await runMiddleware(req, res, cors());
+    
     const userConnection = mongoose.createConnection(process.env.USER_DATABASE_URL!, { useNewUrlParser: true, useUnifiedTopology: true });
     userConnection.set('useCreateIndex', true);
     const User: mongoose.Model<IUser> = userConnection.models.User || userConnection.model('User', userSchema);
-
+    
     const method = req.method || 'GET';
 
     let hasApiKey = req.query.api_key != null || req.query.apikey != null || req.query.apiKey != null || req.query.ApiKey != null || req.query.APIkey != null || req.query.APIKey != null || req.query.APIKEY != null || req.query['api-key'] != null;
@@ -31,19 +38,29 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             const user = await User.findOne(hasApiKey ? { apiKey } : { firebaseId });
             if (user == null) throw new Error('User not found');
 
-            const id = user.id;
-            res.json({ id });
+            const { id, settings } = user;
+            res.json({ id, settings });
         } catch (err) {
             res.status(404).json({ error: { status: 404, message: 'The user could not be found' } });
         }
     } else if (['PUT', 'PATCH'].includes(method)) {
-        const newApiKey = uuid();
+        let { settings }: {
+            settings?: Settings;
+        } = req.body;
+
+        if (!settings) {
+            return res.status(400).json({ error: { status: 400, message: 'settings must be defined' } });
+        }
+        if (!settings.syncSettings) settings = undefined;
 
         try {
             const user = await User.findOne(hasApiKey ? { apiKey } : { firebaseId });
             if (user == null) throw new Error('User not found');
+            
+            user.settings = settings;
+            const updatedUser = await user.save();
 
-            user.updateOne({ apiKey: newApiKey });
+            res.json(updatedUser);
         } catch (err) {
             res.status(404).json({ error: { status: 404, message: 'The user could not be found' } });
         }
@@ -52,7 +69,17 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             const user = await User.findOne(hasApiKey ? { apiKey } : { firebaseId });
             if (user == null) throw new Error('User not found');
 
-            user.delete();
+            const queryString = hasApiKey ? `?api_key=${apiKey}` : `?firebase_id=${firebaseId}`;
+
+            const todos = <ITodo[]>await fetch(`${process.env.NODE_ENV === 'production' ? 'https://todite.now.sh' : 'http://localhost:3000'}/api/todos${queryString}`).then(res => res.json());
+
+            for (const todo of todos) {
+                await fetch(`${process.env.NODE_ENV === 'production' ? 'https://todite.now.sh' : 'http://localhost:3000'}/api/todo/${todo._id}${queryString}`, {
+                    method: 'DELETE'
+                });
+            }
+
+            user.delete().then(res.json({ success: true }));
         } catch (err) {
             res.status(404).json({ error: { status: 404, message: 'The user could not be found' } });
         }
@@ -60,6 +87,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         const { firebaseId }: {
             firebaseId?: string;
         } = req.body;
+        let settings = req.body.settings as Settings | undefined;
+
+        if (settings && !settings.syncSettings) settings = undefined;
 
         if (!firebaseId) {
             return res.status(400).json({ error: { status: 400, message: 'firebaseId must be defined' } });
@@ -67,7 +97,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
         const apiKey = uuid();
 
-        const user = await User.create({ apiKey, firebaseId });
+        const user = await User.create({ apiKey, firebaseId, settings });
 
         const firstTodo: ITodo = await fetch(`${process.env.NODE_ENV === 'production' ? 'https://todite.now.sh' : 'http://localhost:3000'}/api/todos?api_key=${apiKey}`, {
             method: 'POST',

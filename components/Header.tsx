@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface HeaderProps {
-    page: 'about' | 'todos' | 'sign-in' | 'sign-up';
+    page: 'about' | 'todos' | 'sign-in' | 'sign-up' | 'settings';
 }
 
 const Header = ({ page }: HeaderProps): React.ReactElement<{
@@ -9,7 +9,7 @@ const Header = ({ page }: HeaderProps): React.ReactElement<{
     className: string;
 }, 'header'> => (
     <header className="text-5xl text-center font-bold p-3.5">
-        <h1>{ page === 'about' || page === 'todos' ? 'Todite' : (page === 'sign-in' ? 'Sign In to Todite' : 'Sign Up for Todite') }</h1>
+        <h1>{ page === 'about' || page === 'todos' ? 'Todite' : (page === 'sign-in' ? 'Sign In to Todite' : (page === 'sign-up' ? 'Sign Up for Todite' : 'Settings')) }</h1>
     </header>
 );
 

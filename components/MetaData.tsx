@@ -3,12 +3,12 @@ import React from 'react';
 import Head from 'next/head';
 
 interface MetaDataProps {
-    page: 'about' | 'sign-in' | 'sign-up' | 'todos';
+    page: 'about' | 'sign-in' | 'sign-up' | 'todos' | 'settings';
 }
 
 const MetaData = ({ page }: MetaDataProps) => (
     <Head>
-        <title>{ page === 'about' || page === 'todos' ? 'Todite' : `Todite | Sign ${page === 'sign-in' ? 'In' : 'Up'}` }</title>
+        <title>{ page === 'about' || page === 'todos' ? 'Todite' : (page === 'sign-in' || page === 'sign-up' ? `Todite | Sign ${page === 'sign-in' ? 'In' : 'Up'}` : 'Todite | Settings') }</title>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="keywords" content="todite, todo, to-do, todo list, to-do list, todolist, todo-list, todo-app" />

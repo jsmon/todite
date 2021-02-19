@@ -8,9 +8,10 @@ import Todo from './Todo';
 
 interface TodosProps {
     user?: firebase.User;
+    deleteTodoOnCompleted: boolean;
 }
 
-const Todos = ({ user }: TodosProps): React.ReactElement<{
+const Todos = ({ user, deleteTodoOnCompleted }: TodosProps): React.ReactElement<{
     children: React.ReactNode;
 }, 'div'> => {
     const [todos, setTodos] = useState<TodoObj[]>([]);
@@ -86,7 +87,20 @@ const Todos = ({ user }: TodosProps): React.ReactElement<{
         });
     };
 
+    const deleteTodo = (id: string) => {
+        setTodos(prevTodos => prevTodos.filter(todo => todo._id !== id));
+
+        fetch(`/api/todo/${id}?firebase_id=${user!.uid}`, {
+            method: 'DELETE'
+        });
+    };
+    
     const updateTodoCompleted = (id: string, completed: boolean) => {
+        if (deleteTodoOnCompleted && completed) {
+            deleteTodo(id);
+            return;
+        }
+
         fetch(`/api/todo/${id}?firebase_id=${user!.uid}`, {
             method: 'PATCH',
             headers: {
@@ -103,14 +117,6 @@ const Todos = ({ user }: TodosProps): React.ReactElement<{
             }
             return 0;
         }));
-    };
-
-    const deleteTodo = (id: string) => {
-        setTodos(prevTodos => prevTodos.filter(todo => todo._id !== id));
-
-        fetch(`/api/todo/${id}?firebase_id=${user!.uid}`, {
-            method: 'DELETE'
-        });
     };
 
     return (
