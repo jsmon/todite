@@ -1,10 +1,15 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
+import runMiddleware from '../../../utils/run-middleware';
+
 import * as mongoose from 'mongoose';
+import cors from 'cors';
 
 import todoSchema, { ITodo } from '../../../models/todo';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+    await runMiddleware(req, res, cors());
+
     const todoConnection = mongoose.createConnection(process.env.TODO_DATABASE_URL!, { useNewUrlParser: true, useUnifiedTopology: true });
     todoConnection.set('useCreateIndex', true);
     const Todo: mongoose.Model<ITodo> = todoConnection.models.Todo || todoConnection.model('Todo', todoSchema);
