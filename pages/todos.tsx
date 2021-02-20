@@ -42,7 +42,7 @@ const TodosPage = (): React.ReactElement<{
                 return;
             }
 
-            const settings = await getSettings(user.uid);
+            const settings = await getSettings(user);
 
             if (settings.syncSettings) {
                 localStorage.removeItem('unsynced-theme');

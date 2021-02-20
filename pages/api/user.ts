@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 import runMiddleware from '../../utils/run-middleware';
+import admin from '../../utils/admin';
 
 import * as mongoose from 'mongoose';
 import { v4 as uuid } from 'uuid';
@@ -21,25 +22,31 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const method = req.method || 'GET';
 
     let hasApiKey = req.query.api_key != null || req.query.apikey != null || req.query.apiKey != null || req.query.ApiKey != null || req.query.APIkey != null || req.query.APIKey != null || req.query.APIKEY != null || req.query['api-key'] != null;
-    let hasFirebaseId = req.query.firebase_id != null || req.query.firebase != null || req.query.id != null || req.query.firebaseid != null || req.query.firebaseId != null || req.query.firebaseID != null || req.query['firebase-id'] != null;
-    if (!hasApiKey && !hasFirebaseId && method !== 'POST') {
+    let hasToken = req.headers.authorization != null;
+    if (!hasApiKey && !hasToken) {
         return res.status(400).json({ error: { status: 400, message: 'api_key query parameter must be defined.' } });
     }
 
 
-    let apiKey = req.query.api_key || req.query.apikey || req.query.apiKey || req.query.ApiKey || req.query.APIkey || req.query.APIKey || req.query.APIKEY || req.query['api-key'];
+    let apiKey = req.query.api_key || req.query.apikey || req.query.apiKey || req.query.ApiKey || req.query.APIkey || req.query.APIKey || req.query.APIKEY || <string | string[] | undefined>req.query['api-key'];
     if (Array.isArray(apiKey)) apiKey = apiKey[0];
 
-    let firebaseId = req.query.firebase_id || req.query.firebase || req.query.id || req.query.firebaseid || req.query.firebaseId || req.query.firebaseID || req.query['firebase-id'];
-    if (Array.isArray(firebaseId)) firebaseId = firebaseId[0];
+    const token = req.headers.authorization;
+
+    let firebaseId: string | undefined;
+    try {
+        firebaseId = hasToken ? await admin.auth().verifyIdToken(token!).then(decodedToken => decodedToken.uid) : undefined;
+    } catch {
+        return res.status(400).json({ error: { status: 400, message: 'Invalid Authorization token' } });
+    }
 
     if (method === 'GET') {
         try {
             const user = await User.findOne(hasApiKey ? { apiKey } : { firebaseId });
             if (user == null) throw new Error('User not found');
 
-            const { id, settings } = user;
-            res.json({ id, settings });
+            const { _id, firebaseId: uid, settings } = user;
+            res.json({ _id, uid, settings });
         } catch (err) {
             res.status(404).json({ error: { status: 404, message: 'The user could not be found' } });
         }
@@ -69,14 +76,24 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             const user = await User.findOne(hasApiKey ? { apiKey } : { firebaseId });
             if (user == null) throw new Error('User not found');
 
-            const queryString = hasApiKey ? `?api_key=${apiKey}` : `?firebase_id=${firebaseId}`;
+            const url = `${process.env.NODE_ENV === 'production' ? 'https://todite.now.sh' : 'http://localhost:3000'}/api/todo`;
 
-            const todos = <ITodo[]>await fetch(`${process.env.NODE_ENV === 'production' ? 'https://todite.now.sh' : 'http://localhost:3000'}/api/todos${queryString}`).then(res => res.json());
+            const todos: ITodo[] = hasApiKey
+                ? await fetch(`${url}s?api_key=${apiKey}`).then(res => res.json())
+                : await fetch(`${url}s`, {
+                    method: 'GET',
+                    headers: { Authorization: token! }
+                }).then(res => res.json());
 
             for (const todo of todos) {
-                await fetch(`${process.env.NODE_ENV === 'production' ? 'https://todite.now.sh' : 'http://localhost:3000'}/api/todo/${todo._id}${queryString}`, {
-                    method: 'DELETE'
-                });
+                if (hasApiKey) {
+                    await fetch(`${url}/${todo._id}?api_key=${apiKey}`, { method: 'DELETE' });
+                } else {
+                    await fetch(`${url}/${todo._id}`, {
+                        method: 'DELETE',
+                        headers: { Authorization: token! }
+                    });
+                }
             }
 
             user.delete().then(() => res.json({ success: true }));
@@ -84,42 +101,31 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             res.status(404).json({ error: { status: 404, message: 'The user could not be found' } });
         }
     } else if (method === 'POST') {
-        const { firebaseId }: {
-            firebaseId?: string;
-        } = req.body;
+        console.log('here in post')
         let settings: Settings | undefined = req.body.settings;
 
         if (settings && !settings.syncSettings) settings = undefined;
 
-        if (!firebaseId) {
-            return res.status(400).json({ error: { status: 400, message: 'firebaseId must be defined' } });
-        }
-
         const apiKey = uuid();
 
         const user = await User.create({ apiKey, firebaseId, settings });
+        console.log(user);
 
         const firstTodo: ITodo = await fetch(`${process.env.NODE_ENV === 'production' ? 'https://todite.now.sh' : 'http://localhost:3000'}/api/todos?api_key=${apiKey}`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name: 'Create an account on Todite' })
         }).then(res => res.json());
 
         await fetch(`${process.env.NODE_ENV === 'production' ? 'https://todite.now.sh' : 'http://localhost:3000'}/api/todo/${firstTodo._id}?api_key=${apiKey}`, {
             method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ completed: true })
         });
 
         await fetch(`${process.env.NODE_ENV === 'production' ? 'https://todite.now.sh' : 'http://localhost:3000'}/api/todos?api_key=${apiKey}`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name: 'Create your first to-do' })
         });
 

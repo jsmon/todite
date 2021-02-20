@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 import runMiddleware from '../../../utils/run-middleware';
+import admin from '../../../utils/admin';
 
 import * as mongoose from 'mongoose';
 import cors from 'cors';
@@ -20,31 +21,33 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (Array.isArray(id)) id = id[0];
 
     let hasApiKey = req.query.api_key != null || req.query.apikey != null || req.query.apiKey != null || req.query.ApiKey != null || req.query.APIkey != null || req.query.APIKey != null || req.query.APIKEY != null || req.query['api-key'] != null;
-    let hasFirebaseId = req.query.firebase_id != null || req.query.firebase != null || req.query.id != null || req.query.firebaseid != null || req.query.firebaseId != null || req.query.firebaseID != null || req.query['firebase-id'] != null;
-    if (!hasApiKey && !hasFirebaseId) {
+    let hasToken = req.headers.authorization != null;
+    if (!hasApiKey && !hasToken) {
         return res.status(400).json({ error: { status: 400, message: 'api_key query parameter must be defined.' } });
     }
 
 
-    let apiKey = req.query.api_key || req.query.apikey || req.query.apiKey || req.query.ApiKey || req.query.APIkey || req.query.APIKey || req.query.APIKEY || req.query['api-key'];
+    let apiKey = req.query.api_key || req.query.apikey || req.query.apiKey || req.query.ApiKey || req.query.APIkey || req.query.APIKey || req.query.APIKEY || <string | string[] | undefined>req.query['api-key'];
     if (Array.isArray(apiKey)) apiKey = apiKey[0];
 
-    let firebaseId = req.query.firebase_id || req.query.firebase || req.query.id || req.query.firebaseid || req.query.firebaseId || req.query.firebaseID || req.query['firebase-id'];
-    if (Array.isArray(firebaseId)) firebaseId = firebaseId[0];
+    const token = req.headers.authorization;
 
-    const queryString = hasApiKey ? `?api_key=${apiKey}` : `?firebase_id=${firebaseId}`;
-
-    const user: {
-        id: string;
-        error?: {
-            status: number;
-            message: string;
-        };
-    } = await fetch(process.env.NODE_ENV === 'production' ? `https://todite.now.sh/api/user${queryString}` : `http://localhost:3000/api/user${queryString}`).then(res => res.json());
-    if (user.error) {
-        return res.status(403).json({ error: { status: 403, message: 'Invalid API Key' } });
+    let uid: string;
+    try {
+        uid = hasToken
+            ? await admin.auth().verifyIdToken(token!).then(decodedToken => decodedToken.uid)
+            : await fetch(`${process.env.NODE_ENV === 'production' ? 'https://todite.now.sh' : 'http://localhost:3000'}/api/user?api_key=${apiKey}`)
+                .then(res => res.json())
+                .then((user: {
+                    uid: string;
+                    error?: {
+                        status: number;
+                        message: string;
+                    }
+                }) => user.uid);
+    } catch {
+        return res.status(400).json({ error: { status: 400, message: 'Invalid Authorization token' } });
     }
-    const uid = user.id;
 
     if (method === 'GET') {
         const todo = await Todo.findById(id);

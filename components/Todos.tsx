@@ -22,7 +22,11 @@ const Todos = ({ user, deleteTodoOnCompleted }: TodosProps): React.ReactElement<
         if (!user) return;
 
         (async () => {
-            let data: TodoObj[] = await fetch(`/api/todos?firebase_id=${user.uid}`).then(res => res.json());
+            let data: TodoObj[] = await fetch('/api/todos', {
+                method: 'GET',
+                headers: { Authorization: await user.getIdToken(true) }
+            }).then(res => res.json());
+
             if (!Array.isArray(data) && (data as {
                 error?: {
                     status: number;
@@ -31,11 +35,14 @@ const Todos = ({ user, deleteTodoOnCompleted }: TodosProps): React.ReactElement<
             }).error) {
                 await fetch('/api/user', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ firebaseId: user.uid })
+                    headers: { Authorization: await user.getIdToken(true) }
                 });
+                console.log('posted')
 
-                data = await fetch(`/api/todos?firebase_id=${user.uid}`).then(res => res.json());
+                data = await fetch('/api/todos', {
+                    method: 'GET',
+                    headers: { Authorization: await user.getIdToken(true) }
+                }).then(res => res.json());
             }
             data.sort((a, b) => {
                 if (!a.completed && b.completed) {
@@ -57,9 +64,14 @@ const Todos = ({ user, deleteTodoOnCompleted }: TodosProps): React.ReactElement<
     const addNewTodo = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        const newTodoObj: TodoObj = await fetch(`/api/todos?firebase_id=${user!.uid}`, {
+        if (!user) return;
+
+        const newTodoObj: TodoObj = await fetch('/api/todos', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: await user.getIdToken(true)
+            },
             body: JSON.stringify({ name: newTodo })
         }).then(res => res.json());
 
@@ -74,37 +86,48 @@ const Todos = ({ user, deleteTodoOnCompleted }: TodosProps): React.ReactElement<
         }));
     };
 
-    const updateTodoName = (id: string, newName: string) => {
+    const updateTodoName = async (id: string, newName: string) => {
+        if (!user) return;
+
         setTodos(prevTodos => prevTodos.map(todo => {
             if (todo._id !== id) return todo;
             return { ...todo, name: newName };
         }));
 
-        fetch(`/api/todo/${id}?firebase_id=${user!.uid}`, {
+        fetch(`/api/todo/${id}`, {
             method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: await user.getIdToken(true)
+            },
             body: JSON.stringify({ name: newName })
         });
     };
 
-    const deleteTodo = (id: string) => {
+    const deleteTodo = async (id: string) => {
+        if (!user) return;
+
         setTodos(prevTodos => prevTodos.filter(todo => todo._id !== id));
 
-        fetch(`/api/todo/${id}?firebase_id=${user!.uid}`, {
-            method: 'DELETE'
+        fetch(`/api/todo/${id}`, {
+            method: 'DELETE',
+            headers: { Authorization: await user.getIdToken(true) }
         });
     };
     
-    const updateTodoCompleted = (id: string, completed: boolean) => {
+    const updateTodoCompleted = async (id: string, completed: boolean) => {
+        if (!user) return;
+        
         if (deleteTodoOnCompleted && completed) {
             deleteTodo(id);
             return;
         }
 
-        fetch(`/api/todo/${id}?firebase_id=${user!.uid}`, {
+        fetch(`/api/todo/${id}`, {
             method: 'PATCH',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                Authorization: await user.getIdToken(true)
             },
             body: JSON.stringify({ completed })
         });

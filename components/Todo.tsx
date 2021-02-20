@@ -6,9 +6,9 @@ import TodoObj from '../types/todo';
 
 interface TodoProps {
     todo: TodoObj;
-    updateTodoName: (id: string, newName: string) => void;
-    updateTodoCompleted: (id: string, completed: boolean) => void;
-    deleteTodo: (id: string) => void;
+    updateTodoName: (id: string, newName: string) => Promise<void>;
+    updateTodoCompleted: (id: string, completed: boolean) => Promise<void>;
+    deleteTodo: (id: string) => Promise<void>;
 }
 
 const Todo = ({ todo, updateTodoName, updateTodoCompleted, deleteTodo }: TodoProps): React.ReactElement<{

@@ -44,7 +44,7 @@ const SettingsPage = (): React.ReactElement<{
                 return;
             }
 
-            const settings = await getSettings(user.uid);
+            const settings = await getSettings(user);
 
             if (settings.syncSettings) {
                 localStorage.removeItem('unsynced-theme');
@@ -126,10 +126,11 @@ const SettingsPage = (): React.ReactElement<{
             localStorage.setItem('synced-deleteTodoOnCompleted', deleteTodoOnCompleted.toString());
             localStorage.setItem('synced-syncSettings', 'true');
 
-            await fetch(`/api/user?firebase_id=${user.uid}`, {
+            await fetch('/api/user', {
                 method: 'PUT',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    Authorization: await user.getIdToken(true)
                 },
                 body: JSON.stringify({ settings: { theme, deleteTodoOnCompleted, syncSettings } })
             });
@@ -164,8 +165,25 @@ const SettingsPage = (): React.ReactElement<{
         auth!.signOut();
     };
 
-    const deleteUser = async () => {
+    const reauthenticateWithEmailCredential = async (): Promise<void> => {
         if (!user) return;
+
+        try {
+            const password = await Swal.fire({
+                icon: 'info',
+                input: 'password',
+                title: 'Please confirm your password',
+            }).then(password => password.value);
+
+            const credential = firebase.auth.EmailAuthProvider.credential(user.email!, password);
+            await user.reauthenticateWithCredential(credential);
+        } catch {
+            return reauthenticateWithEmailCredential();
+        }
+    };
+
+    const deleteUser = async () => {
+        if (!user || !auth) return;
 
         const choice = await Swal.fire({
             showDenyButton: true,
@@ -191,17 +209,23 @@ const SettingsPage = (): React.ReactElement<{
             });
 
             if (lastChance.isDenied) {
-                user!.delete().catch(async () => {
+                user.delete().catch(async () => {
                     const provider = user.providerData[0]?.providerId!;
 
-                    const password = provider === 'password' ? await Swal.fire({
-                        icon: 'info',
-                        input: 'password',
-                        title: 'Please confirm your password',
-                    }).then(password => password.value) : undefined;
+                    fetch('/api/user', {
+                        method: 'DELETE',
+                        headers: { Authorization: await user.getIdToken(true) }
+                    });
 
-                    fetch(`/api/user?firebase_id=${user.uid}`, { method: 'DELETE' });
-                    user!.reauthenticateWithCredential(provider === 'password' ? firebase.auth.EmailAuthProvider.credential(user.email!, password) : firebase.auth.GoogleAuthProvider.credential(await user.getIdToken()));
+                    if (provider === 'password') {
+                        await reauthenticateWithEmailCredential();
+                    } else {
+                        await user.reauthenticateWithCredential(await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())
+                            .then(result => result.credential!));
+                    }
+                    
+                    await user.delete();
+                    
                     window.location.replace('/sign-in');
                 });
             }

@@ -1,14 +1,18 @@
+import firebase from 'firebase/app';
 import Settings, { Theme } from '../types/settings';
 
-const getSettings = async (uid?: string): Promise<Settings> => {
+const getSettings = async (user?: firebase.User): Promise<Settings> => {
     let theme: Theme = 'system';
     let deleteTodoOnCompleted = false;
     let syncSettings = true;
 
     let settings: Settings | undefined;
 
-    if (uid) {
-        settings = await fetch(`/api/user?firebase_id=${uid}`).then(res => res.json()).then(user => user.settings);
+    if (user) {
+        settings = await fetch('/api/user', {
+            method: 'GET',
+            headers: { Authorization: await user.getIdToken(true) }
+        }).then(res => res.json()).then(user => user.settings);
         if (settings) {
             theme = settings.theme;
             deleteTodoOnCompleted = settings.deleteTodoOnCompleted;
