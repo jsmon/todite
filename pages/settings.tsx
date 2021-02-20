@@ -1,10 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 
+import Link from 'next/link';
+
 import firebaseTypes from 'firebase/app';
 import { Theme } from '../types/settings';
 
 import { useAuthState } from 'react-firebase-hooks/auth';
 import Swal from 'sweetalert2';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 import firebase from '../utils/firebase';
 import getSettings from '../utils/get-settings';
@@ -243,6 +247,7 @@ const SettingsPage = (): React.ReactElement<{
         <main>
             <MetaData page="settings" />
             <Header page="settings" />
+            <Link href="/todos"><a className="absolute top-2 left-2"><i><FontAwesomeIcon icon={faArrowLeft} /></i> Back</a></Link>
 
             <form className="settings" onSubmit={saveSettings}>
                 <div id="theme" className="p-2">
