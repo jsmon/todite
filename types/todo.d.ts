@@ -6,4 +6,6 @@ export default interface Todo {
     name: string;
     /** Whether it has been done */
     completed: boolean;
+    /** When the todo needs to be done by */
+    date?: Date;
 }

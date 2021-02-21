@@ -11,8 +11,7 @@ import todoSchema, { ITodo } from '../../../models/todo';
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     await runMiddleware(req, res, cors());
 
-    const todoConnection = mongoose.createConnection(process.env.TODO_DATABASE_URL!, { useNewUrlParser: true, useUnifiedTopology: true });
-    todoConnection.set('useCreateIndex', true);
+    const todoConnection = await mongoose.createConnection(process.env.TODO_DATABASE_URL!, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });
     const Todo: mongoose.Model<ITodo> = todoConnection.models.Todo || todoConnection.model('Todo', todoSchema);
 
     const method = req.method || 'GET';
@@ -65,13 +64,18 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             return res.status(404).json({ error: { status: 404, message: `A to-do with id "${id}" could not be found` } })
         }
 
-        const { name = todo.name, completed = todo.completed }: {
+        const { name = todo.name, completed = todo.completed, date = todo.date }: {
             name?: string;
             completed?: boolean;
+            date?: Date;
         } = req.body;
 
         if (todo.user === uid) {
-            const newTodo = await todo.updateOne({ name, completed });
+            if (name != null) todo.name = name;
+            if (completed != null) todo.completed = completed;
+            if (date != null) todo.date = date;
+
+            const newTodo = await todo.save();
             res.json(newTodo);
         } else {
             res.status(403).json({ error: { status: 403, message: 'You can only access your own to-dos' } });

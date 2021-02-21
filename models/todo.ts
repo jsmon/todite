@@ -4,6 +4,7 @@ export interface ITodo extends mongoose.Document {
     name: string;
     completed: boolean;
     user: string;
+    date?: Date;
 }
 
 const todoSchema = new mongoose.Schema<ITodo>({
@@ -18,6 +19,9 @@ const todoSchema = new mongoose.Schema<ITodo>({
     user: {
         type: String,
         required: true
+    },
+    date: {
+        type: Date
     }
 });
 

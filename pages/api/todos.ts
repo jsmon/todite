@@ -11,8 +11,7 @@ import todoSchema, { ITodo } from '../../models/todo';
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     await runMiddleware(req, res, cors());
 
-    const todoConnection = mongoose.createConnection(process.env.TODO_DATABASE_URL!, { useNewUrlParser: true, useUnifiedTopology: true });
-    todoConnection.set('useCreateIndex', true);
+    const todoConnection = await mongoose.createConnection(process.env.TODO_DATABASE_URL!, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });
     const Todo: mongoose.Model<ITodo> = todoConnection.models.Todo || todoConnection.model('Todo', todoSchema);
 
     const method = req.method || 'GET';
@@ -74,15 +73,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
         res.json(todos);
     } else if (method === 'POST') {
-        const { name }: {
+        const { name, date }: {
             name?: string;
+            date?: Date;
         } = req.body;
 
         if (name == null) {
             return res.status(400).json({ error: { status: 400, message: 'name must be defined' } })
         }
 
-        const newTodo = await Todo.create({ name, completed: false, user: uid });
+        const newTodo = await Todo.create({ name, completed: false, user: uid, date });
         res.status(201).json(newTodo);
     } else {
         res.setHeader('Access-Control-Allow-Methods', ['GET', 'POST']);

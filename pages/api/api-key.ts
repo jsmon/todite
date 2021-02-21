@@ -12,8 +12,7 @@ import userSchema, { IUser } from '../../models/user';
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     await runMiddleware(req, res, cors());
 
-    const userConnection = mongoose.createConnection(process.env.USER_DATABASE_URL!, { useNewUrlParser: true, useUnifiedTopology: true });
-    userConnection.set('useCreateIndex', true);
+    const userConnection = await mongoose.createConnection(process.env.USER_DATABASE_URL!, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });
     const User: mongoose.Model<IUser> = userConnection.models.User || userConnection.model('User', userSchema);
 
     const method = req.method || 'GET';

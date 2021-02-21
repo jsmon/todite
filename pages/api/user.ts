@@ -15,8 +15,7 @@ import { ITodo } from '../../models/todo';
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     await runMiddleware(req, res, cors());
     
-    const userConnection = mongoose.createConnection(process.env.USER_DATABASE_URL!, { useNewUrlParser: true, useUnifiedTopology: true });
-    userConnection.set('useCreateIndex', true);
+    const userConnection = await mongoose.createConnection(process.env.USER_DATABASE_URL!, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });
     const User: mongoose.Model<IUser> = userConnection.models.User || userConnection.model('User', userSchema);
     
     const method = req.method || 'GET';
@@ -96,12 +95,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 }
             }
 
-            user.delete().then(() => res.json({ success: true }));
+            await user.delete();
+
+            return res.json({ success: true });
         } catch (err) {
             res.status(404).json({ error: { status: 404, message: 'The user could not be found' } });
         }
     } else if (method === 'POST') {
-        console.log('here in post')
         let settings: Settings | undefined = req.body.settings;
 
         if (settings && !settings.syncSettings) settings = undefined;
@@ -109,7 +109,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         const apiKey = uuid();
 
         const user = await User.create({ apiKey, firebaseId, settings });
-        console.log(user);
 
         const firstTodo: ITodo = await fetch(`${process.env.NODE_ENV === 'production' ? 'https://todite.now.sh' : 'http://localhost:3000'}/api/todos?api_key=${apiKey}`, {
             method: 'POST',
