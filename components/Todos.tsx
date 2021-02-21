@@ -50,7 +50,7 @@ const Todos = ({ user, deleteTodoOnCompleted }: TodosProps): React.ReactElement<
         if (!user) return;
 
         (async () => {
-            let data: TodoObj[] = await fetch('/api/todos', {
+            let data: TodoObj[] = await fetch('/api/v1/todos', {
                 method: 'GET',
                 headers: { Authorization: await user.getIdToken(true) }
             }).then(res => res.json());
@@ -61,12 +61,12 @@ const Todos = ({ user, deleteTodoOnCompleted }: TodosProps): React.ReactElement<
                     message: string;
                 };
             }).error) {
-                await fetch('/api/user', {
+                await fetch('/api/v1/user', {
                     method: 'POST',
                     headers: { Authorization: await user.getIdToken(true) }
                 });
 
-                data = await fetch('/api/todos', {
+                data = await fetch('/api/v1/todos', {
                     method: 'GET',
                     headers: { Authorization: await user.getIdToken(true) }
                 }).then(res => res.json());
@@ -102,7 +102,7 @@ const Todos = ({ user, deleteTodoOnCompleted }: TodosProps): React.ReactElement<
         
         setNewTodo('');
         
-        const newTodoObj: TodoObj = await fetch('/api/todos', {
+        const newTodoObj: TodoObj = await fetch('/api/v1/todos', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -124,7 +124,7 @@ const Todos = ({ user, deleteTodoOnCompleted }: TodosProps): React.ReactElement<
             return { ...todo, name: newName };
         }));
 
-        await fetch(`/api/todo/${id}`, {
+        await fetch(`/api/v1/todo/${id}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -166,7 +166,7 @@ const Todos = ({ user, deleteTodoOnCompleted }: TodosProps): React.ReactElement<
 
         setTodos(prevTodos => prevTodos.filter(todo => todo._id !== id));
 
-        await fetch(`/api/todo/${id}`, {
+        await fetch(`/api/v1/todo/${id}`, {
             method: 'DELETE',
             headers: { Authorization: await user.getIdToken(true) }
         });
@@ -213,7 +213,7 @@ const Todos = ({ user, deleteTodoOnCompleted }: TodosProps): React.ReactElement<
 
         setTodos(prevTodos => prevTodos.map(todo => todo._id === id ? { ...todo, completed } : todo).sort(sortFunc));
         
-        await fetch(`/api/todo/${id}`, {
+        await fetch(`/api/v1/todo/${id}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -263,7 +263,7 @@ const Todos = ({ user, deleteTodoOnCompleted }: TodosProps): React.ReactElement<
         }
         setTodos(prevTodos => prevTodos.map(todo => todo._id === id ? { ...todo, date } : todo));
 
-        await fetch(`/api/todo/${id}`, {
+        await fetch(`/api/v1/todo/${id}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',

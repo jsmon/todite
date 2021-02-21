@@ -130,7 +130,7 @@ const SettingsPage = (): React.ReactElement<{
             localStorage.setItem('synced-deleteTodoOnCompleted', deleteTodoOnCompleted.toString());
             localStorage.setItem('synced-syncSettings', 'true');
 
-            await fetch('/api/user', {
+            await fetch('/api/v1/user', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -216,7 +216,7 @@ const SettingsPage = (): React.ReactElement<{
                 user.delete().catch(async () => {
                     const provider = user.providerData[0]?.providerId!;
 
-                    fetch('/api/user', {
+                    fetch('/api/v1/user', {
                         method: 'DELETE',
                         headers: { Authorization: await user.getIdToken(true) }
                     });

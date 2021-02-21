@@ -1,16 +1,16 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-import runMiddleware from '../../utils/run-middleware';
-import admin from '../../utils/admin';
+import runMiddleware from '../../../utils/run-middleware';
+import admin from '../../../utils/admin';
 
 import * as mongoose from 'mongoose';
 import { v4 as uuid } from 'uuid';
 import cors from 'cors';
 
-import Settings from '../../types/settings';
+import Settings from '../../../types/settings';
 
-import userSchema, { IUser } from '../../models/user';
-import { ITodo } from '../../models/todo';
+import userSchema, { IUser } from '../../../models/user';
+import { ITodo } from '../../../models/todo';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     await runMiddleware(req, res, cors());
@@ -75,7 +75,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             const user = await User.findOne(hasApiKey ? { apiKey } : { firebaseId });
             if (user == null) throw new Error('User not found');
 
-            const url = `${process.env.NODE_ENV === 'production' ? 'https://todite.now.sh' : 'http://localhost:3000'}/api/todo`;
+            const url = `${process.env.NODE_ENV === 'production' ? 'https://todite.now.sh' : 'http://localhost:3000'}/api/v1/todo`;
 
             const todos: ITodo[] = hasApiKey
                 ? await fetch(`${url}s?api_key=${apiKey}`).then(res => res.json())
@@ -110,19 +110,19 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
         const user = await User.create({ apiKey, firebaseId, settings });
 
-        const firstTodo: ITodo = await fetch(`${process.env.NODE_ENV === 'production' ? 'https://todite.now.sh' : 'http://localhost:3000'}/api/todos?api_key=${apiKey}`, {
+        const firstTodo: ITodo = await fetch(`${process.env.NODE_ENV === 'production' ? 'https://todite.now.sh' : 'http://localhost:3000'}/api/v1/todos?api_key=${apiKey}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name: 'Create an account on Todite' })
         }).then(res => res.json());
 
-        await fetch(`${process.env.NODE_ENV === 'production' ? 'https://todite.now.sh' : 'http://localhost:3000'}/api/todo/${firstTodo._id}?api_key=${apiKey}`, {
+        await fetch(`${process.env.NODE_ENV === 'production' ? 'https://todite.now.sh' : 'http://localhost:3000'}/api/v1/todo/${firstTodo._id}?api_key=${apiKey}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ completed: true })
         });
 
-        await fetch(`${process.env.NODE_ENV === 'production' ? 'https://todite.now.sh' : 'http://localhost:3000'}/api/todos?api_key=${apiKey}`, {
+        await fetch(`${process.env.NODE_ENV === 'production' ? 'https://todite.now.sh' : 'http://localhost:3000'}/api/v1/todos?api_key=${apiKey}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name: 'Create your first to-do' })

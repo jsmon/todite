@@ -1,12 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-import runMiddleware from '../../../utils/run-middleware';
-import admin from '../../../utils/admin';
+import runMiddleware from '../../../../utils/run-middleware';
+import admin from '../../../../utils/admin';
 
 import * as mongoose from 'mongoose';
 import cors from 'cors';
 
-import todoSchema, { ITodo } from '../../../models/todo';
+import todoSchema, { ITodo } from '../../../../models/todo';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     await runMiddleware(req, res, cors());
@@ -35,7 +35,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
         uid = hasToken
             ? await admin.auth().verifyIdToken(token!).then(decodedToken => decodedToken.uid)
-            : await fetch(`${process.env.NODE_ENV === 'production' ? 'https://todite.now.sh' : 'http://localhost:3000'}/api/user?api_key=${apiKey}`)
+            : await fetch(`${process.env.NODE_ENV === 'production' ? 'https://todite.now.sh' : 'http://localhost:3000'}/api/v1/user?api_key=${apiKey}`)
                 .then(res => res.json())
                 .then((user: {
                     uid: string;

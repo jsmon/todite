@@ -1,13 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-import runMiddleware from '../../utils/run-middleware';
-import admin from '../../utils/admin';
+import runMiddleware from '../../../utils/run-middleware';
+import admin from '../../../utils/admin';
 
 import * as mongoose from 'mongoose';
 import { v4 as uuid } from 'uuid';
 import cors from 'cors';
 
-import userSchema, { IUser } from '../../models/user';
+import userSchema, { IUser } from '../../../models/user';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     await runMiddleware(req, res, cors());

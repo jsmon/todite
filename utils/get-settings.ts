@@ -9,7 +9,7 @@ const getSettings = async (user?: firebase.User): Promise<Settings> => {
     let settings: Settings | undefined;
 
     if (user) {
-        settings = await fetch('/api/user', {
+        settings = await fetch('/api/v1/user', {
             method: 'GET',
             headers: { Authorization: await user.getIdToken(true) }
         }).then(res => res.json()).then(user => user.settings);
