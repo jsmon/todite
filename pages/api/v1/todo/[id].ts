@@ -70,6 +70,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             date?: Date;
         } = req.body;
 
+        if (apiKey === '00000000-0000-0000-0000-000000000000') return res.json({ _id: todo.id, name, completed, user: todo.user, date, __v: 0 });
+
         if (todo.user === uid) {
             if (name != null) todo.name = name;
             if (completed != null) todo.completed = completed;
@@ -87,6 +89,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         }
 
         if (todo.user === uid) {
+            if (apiKey === '00000000-0000-0000-0000-000000000000') return res.json({ success: true });
+
             todo.delete().then(() => res.status(200).json({ success: true }));
         } else {
             res.status(403).json({ error: { status: 403, message: 'You can only access your own to-dos' } });

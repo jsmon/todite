@@ -62,6 +62,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         try {
             const user = await User.findOne(hasApiKey ? { apiKey } : { firebaseId });
             if (user == null) throw new Error('User not found');
+
+            if (apiKey === '00000000-0000-0000-0000-000000000000') return res.json({ ...user, settings });
             
             user.settings = settings;
             const updatedUser = await user.save();
@@ -74,6 +76,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         try {
             const user = await User.findOne(hasApiKey ? { apiKey } : { firebaseId });
             if (user == null) throw new Error('User not found');
+
+            if (apiKey === '00000000-0000-0000-0000-000000000000') return res.json({ success: true });
 
             const url = `${process.env.NODE_ENV === 'production' ? 'https://todite.now.sh' : 'http://localhost:3000'}/api/v1/todo`;
 

@@ -73,8 +73,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
         res.json(todos);
     } else if (method === 'POST') {
-        const { name, date }: {
+        const { name, completed = false, date }: {
             name?: string;
+            completed?: boolean;
             date?: Date;
         } = req.body;
 
@@ -82,7 +83,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             return res.status(400).json({ error: { status: 400, message: 'name must be defined' } })
         }
 
-        const newTodo = await Todo.create({ name, completed: false, user: uid, date });
+        if (apiKey === '00000000-0000-0000-0000-000000000000') return res.json({ _id: mongoose.Types.ObjectId(), name, completed, user: uid, date, __v: 0 });
+
+        const newTodo = await Todo.create({ name, completed, user: uid, date });
         res.status(201).json(newTodo);
     } else {
         res.setHeader('Access-Control-Allow-Methods', ['GET', 'POST']);

@@ -52,6 +52,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             res.status(404).json({ error: { status: 404, message: 'The user could not be found' } });
         }
     } else if (['PUT', 'PATCH'].includes(method)) {
+        if (apiKey === '00000000-0000-0000-0000-000000000000') return res.json({ apiKey });
+
         const newApiKey = uuid();
 
         try {
