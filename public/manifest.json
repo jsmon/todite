@@ -1,6 +1,6 @@
 {
-  "name": "Todo List",
-  "short_name": "Todo",
+  "name": "Todite | Organize your day",
+  "short_name": "Todite",
   "start_url": "/todos",
   "icons": [
     {
@@ -18,6 +18,6 @@
   ],
   "theme_color": "#F3F4F6",
   "background_color": "#111827",
-  "display": "fullscreen",
+  "display": "standalone",
   "orientation": "portrait"
 }
