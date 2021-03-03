@@ -70,12 +70,23 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             date?: Date;
         } = req.body;
 
-        if (apiKey === '00000000-0000-0000-0000-000000000000') return res.json({ _id: todo.id, name, completed, user: todo.user, date, __v: 0 });
+        let removeDate = false;
+        // Check if `date` is an empty object
+        if (typeof date === 'object' && !(date instanceof Date) && Object.keys(date).length === 0) removeDate = true;
+
+        if (apiKey === '00000000-0000-0000-0000-000000000000') return res.json({
+            _id: todo.id,
+            name,
+            completed,
+            user: todo.user,
+            date: removeDate ? undefined : date,
+            __v: 0
+        });
 
         if (todo.user === uid) {
             if (name != null) todo.name = name;
             if (completed != null) todo.completed = completed;
-            if (date != null) todo.date = date;
+            if (date != null) todo.date = removeDate ? undefined : date;
 
             const newTodo = await todo.save();
             res.json(newTodo);

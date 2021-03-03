@@ -225,7 +225,7 @@ const Todos = ({ user, deleteTodoOnCompleted }: TodosProps): React.ReactElement<
 
     const updateNewTodoHasDate = () => setNewTodoHasDate(prevNewTodoHasDate => !prevNewTodoHasDate);
 
-    const updateDate = async (id: string, date: Date) => {
+    const updateDate = async (id: string, date?: Date | undefined) => {
         const todo = todos.find(todo => todo._id === id);
 
         if (!todo || !user) return;
@@ -233,32 +233,42 @@ const Todos = ({ user, deleteTodoOnCompleted }: TodosProps): React.ReactElement<
         if (todo.completed) {
             if (todo.date) {
                 let dateHasBeenDeleted = false;
-                setCompletedTodoDates(prevCompletedTodoDates => [...prevCompletedTodoDates.filter(date => {
-                    if (dateHasBeenDeleted) return true;
-    
-                    if (date.getTime() === new Date(todo.date!).getTime()) {
-                        dateHasBeenDeleted = true;
-                        return false;
-                    }
-                    return true;
-                }), date]);
+                setCompletedTodoDates(prevCompletedTodoDates => {
+                    const newDates = prevCompletedTodoDates.filter(date => {
+                        if (dateHasBeenDeleted) return true;
+        
+                        if (date.getTime() === new Date(todo.date!).getTime()) {
+                            dateHasBeenDeleted = true;
+                            return false;
+                        }
+                        return true;
+                    });
+                    if (date) newDates.push(date);
+
+                    return newDates;
+                });
             } else {
-                setCompletedTodoDates(prevCompletedTodoDates => [...prevCompletedTodoDates, date]);
+                if (date) setCompletedTodoDates(prevCompletedTodoDates => [...prevCompletedTodoDates, date]);
             }
         } else {
             if (todo.date) {
                 let dateHasBeenDeleted = false;
-                setTodoDates(prevTodoDates => [...prevTodoDates.filter(date => {
-                    if (dateHasBeenDeleted) return true;
+                setTodoDates(prevTodoDates => {
+                    const newDates = prevTodoDates.filter(date => {
+                        if (dateHasBeenDeleted) return true;
+        
+                        if (date.getTime() === new Date(todo.date!).getTime()) {
+                            dateHasBeenDeleted = true;
+                            return false;
+                        }
+                        return true;
+                    });
+                    if (date) newDates.push(date);
 
-                    if (date.getTime() === new Date(todo.date!).getTime()) {
-                        dateHasBeenDeleted = true;
-                        return false;
-                    }
-                    return true;
-                }), date]);
+                    return newDates;
+                });
             } else {
-                setTodoDates(prevTodoDates => [...prevTodoDates, date]);
+                if (date) setTodoDates(prevTodoDates => [...prevTodoDates, date]);
             }
         }
         setTodos(prevTodos => prevTodos.map(todo => todo._id === id ? { ...todo, date } : todo));
@@ -269,7 +279,7 @@ const Todos = ({ user, deleteTodoOnCompleted }: TodosProps): React.ReactElement<
                 'Content-Type': 'application/json',
                 Authorization: await user.getIdToken(true)
             },
-            body: JSON.stringify({ date })
+            body: JSON.stringify({ date: date ?? {} })
         });
     };
 
