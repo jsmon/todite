@@ -34,7 +34,7 @@ const ApiDocsV1 = () => {
             <Header page="api-docs" apiPage="rest" apiVersion="v1" />
             <main>
                 <section id="user" className="user p-2">
-                    <h2 className="font-bold text-2xl"><code>/user</code></h2>
+                    <h2 className="font-bold text-2xl"><code>/api/v1/user</code></h2>
                     <section>
                         <h3 className="font-bold text-lg"><code>GET</code></h3>
                         <section className="description p-2">
@@ -249,6 +249,31 @@ const ApiDocsV1 = () => {
                                         </li>
                                     </ul>
                                     - The user's site settings
+                                </li>
+                            </ul>
+                        </section>
+                    </section>
+                </section>
+                <section id="contributors" className="contributors p-2">
+                    <h2 className="font-bold text-2xl"><code>/api/v1/contributors</code></h2>
+                    <section>
+                        <h3 className="font-bold text-lg"><code>GET</code></h3>
+                        <section className="description p-2">
+                            <h4 className="font-bold">Description</h4>
+                            <p className="description">Get an array of people who have contributed to Todite</p>
+                        </section>
+                        <section className="data-structure p-2">
+                            <h4 className="font-bold">Data Structure</h4>
+                            <p>This API endpoint returns an array of objects sorted by whether or not they're me (<Link href="https://github.com/jsmon"><a className="text-blue-600 hover:underline focus:underline">James Simon</a></Link>), and then the number of contributions (in descending order). All objects have this data structure:</p>
+                            <ul>
+                                <li>
+                                    <code>name</code> - <code>string</code> - The contributor's GitHub name, or their GitHub profile
+                                </li>
+                                <li>
+                                    <code>github</code> - <code>string</code> - The contributor's GitHub profile
+                                </li>
+                                <li>
+                                    <code>contributions</code> - <code>number</code> - The number of contributions the contributor has made.
                                 </li>
                             </ul>
                         </section>
