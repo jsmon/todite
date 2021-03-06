@@ -52,15 +52,15 @@ const MetaData = ({ page, apiPage, apiVersion }: MetaDataProps) => {
             <meta name="designer" content="James Simon, jsmon.dev@gmail.com" />
             <meta name="reply-to" content="jsmon.dev@gmail.com" />
             <meta name="owner" content="James Simon, jsmon.dev@gmail.com" />
-            <meta name="url" content="https://todite.now.sh/" />
-            <meta name="identifier-URL" content="https://todite.now.sh/" />
+            <meta name="url" content="https://todite.vercel.app/" />
+            <meta name="identifier-URL" content="https://todite.vercel.app/" />
 
             <meta property="og:title" content="Todite" />
             <meta property="og:type" content="website" />
-            <meta property="og:url" content="https://todite.now.sh/" />
-            <meta property="og:image" content="https://todite.now.sh/icons/manifest-icon-192.png" />
-            <meta property="og:image:url" content="https://todite.now.sh/icons/manifest-icon-192.png" />
-            <meta property="og:image:secure_url" content="https://todite.now.sh/icons/manifest-icon-192.png" />
+            <meta property="og:url" content="https://todite.vercel.app/" />
+            <meta property="og:image" content="https://todite.vercel.app/icons/manifest-icon-192.png" />
+            <meta property="og:image:url" content="https://todite.vercel.app/icons/manifest-icon-192.png" />
+            <meta property="og:image:secure_url" content="https://todite.vercel.app/icons/manifest-icon-192.png" />
             <meta property="og:image:type" content="image/png" />
             <meta property="og:image:width" content="192" />
             <meta property="og:image:height" content="192" />

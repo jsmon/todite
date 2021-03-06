@@ -36,7 +36,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         }
     };
 
-    const userApiRoute = `${process.env.NODE_ENV === 'production' ? 'https://todite.now.sh' : 'http://localhost:3000'}/api/v1/user`;
+    const userApiRoute = `${process.env.NODE_ENV === 'production' ? 'https://todite.vercel.app' : 'http://localhost:3000'}/api/v1/user`;
 
     const userExists = hasToken
         ? await fetch(userApiRoute, {
@@ -50,7 +50,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
         user = hasToken
             ? await admin.auth().verifyIdToken(token!).then(decodedToken => ({ uid: decodedToken.uid }))
-            : await fetch(`${process.env.NODE_ENV === 'production' ? 'https://todite.now.sh' : 'http://localhost:3000'}/api/v1/user?api_key=${apiKey}`)
+            : await fetch(`${process.env.NODE_ENV === 'production' ? 'https://todite.vercel.app' : 'http://localhost:3000'}/api/v1/user?api_key=${apiKey}`)
                 .then(res => res.json())
                 .then((user: {
                     uid: string;

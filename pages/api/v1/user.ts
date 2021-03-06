@@ -79,7 +79,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
             if (apiKey === '00000000-0000-0000-0000-000000000000') return res.json({ success: true });
 
-            const url = `${process.env.NODE_ENV === 'production' ? 'https://todite.now.sh' : 'http://localhost:3000'}/api/v1/todo`;
+            const url = `${process.env.NODE_ENV === 'production' ? 'https://todite.vercel.app' : 'http://localhost:3000'}/api/v1/todo`;
 
             const todos: ITodo[] = hasApiKey
                 ? await fetch(`${url}s?api_key=${apiKey}`).then(res => res.json())
@@ -114,19 +114,19 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
         const user = await User.create({ apiKey, firebaseId, settings });
 
-        const firstTodo: ITodo = await fetch(`${process.env.NODE_ENV === 'production' ? 'https://todite.now.sh' : 'http://localhost:3000'}/api/v1/todos?api_key=${apiKey}`, {
+        const firstTodo: ITodo = await fetch(`${process.env.NODE_ENV === 'production' ? 'https://todite.vercel.app' : 'http://localhost:3000'}/api/v1/todos?api_key=${apiKey}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name: 'Create an account on Todite' })
         }).then(res => res.json());
 
-        await fetch(`${process.env.NODE_ENV === 'production' ? 'https://todite.now.sh' : 'http://localhost:3000'}/api/v1/todo/${firstTodo._id}?api_key=${apiKey}`, {
+        await fetch(`${process.env.NODE_ENV === 'production' ? 'https://todite.vercel.app' : 'http://localhost:3000'}/api/v1/todo/${firstTodo._id}?api_key=${apiKey}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ completed: true })
         });
 
-        await fetch(`${process.env.NODE_ENV === 'production' ? 'https://todite.now.sh' : 'http://localhost:3000'}/api/v1/todos?api_key=${apiKey}`, {
+        await fetch(`${process.env.NODE_ENV === 'production' ? 'https://todite.vercel.app' : 'http://localhost:3000'}/api/v1/todos?api_key=${apiKey}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name: 'Create your first to-do' })

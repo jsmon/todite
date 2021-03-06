@@ -35,7 +35,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
         uid = hasToken
             ? await admin.auth().verifyIdToken(token!).then(decodedToken => decodedToken.uid)
-            : await fetch(`${process.env.NODE_ENV === 'production' ? 'https://todite.now.sh' : 'http://localhost:3000'}/api/v1/user?api_key=${apiKey}`)
+            : await fetch(`${process.env.NODE_ENV === 'production' ? 'https://todite.vercel.app' : 'http://localhost:3000'}/api/v1/user?api_key=${apiKey}`)
                 .then(res => res.json())
                 .then((user: {
                     uid: string;

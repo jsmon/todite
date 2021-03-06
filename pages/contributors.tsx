@@ -63,7 +63,7 @@ const ContributorsPage = ({ contributors }: ContributorsPageProps) => {
 };
 
 export const getServerSideProps = async () => {
-    const contributors: Contributor[] = await fetch(process.env.NODE_ENV === 'production' ? 'https://todite.now.sh/api/v1/contributors' : 'http://localhost:3000/api/v1/contributors')
+    const contributors: Contributor[] = await fetch(process.env.NODE_ENV === 'production' ? 'https://todite.vercel.app/api/v1/contributors' : 'http://localhost:3000/api/v1/contributors')
         .then(res => res.json());
 
     return {
