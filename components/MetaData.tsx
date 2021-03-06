@@ -3,12 +3,14 @@ import React from 'react';
 import Head from 'next/head';
 
 interface MetaDataProps {
-    page: 'about' | 'sign-in' | 'sign-up' | 'todos' | 'settings';
+    page: 'about' | 'sign-in' | 'sign-up' | 'todos' | 'settings' | 'api-key' | 'api-docs';
+    apiPage?: 'rest' | 'npm';
+    apiVersion?: 'v1' | 'v0.1';
 }
 
-const MetaData = ({ page }: MetaDataProps) => (
+const MetaData = ({ page, apiPage, apiVersion }: MetaDataProps) => (
     <Head>
-        <title>{ page === 'about' || page === 'todos' ? 'Todite' : (page === 'sign-in' || page === 'sign-up' ? `Todite | Sign ${page === 'sign-in' ? 'In' : 'Up'}` : 'Todite | Settings') }</title>
+        <title>{ page === 'about' || page === 'todos' ? 'Todite | Organize your day' : (page === 'sign-in' || page === 'sign-up' ? `Todite | Sign ${page === 'sign-in' ? 'In' : 'Up'}` : (page === 'api-docs' ? `Todite Dev | ${apiPage === 'rest' ? 'REST API' : 'npm package'} ${apiVersion}` : (page === 'api-key' ? 'Todite Dev | Your API Key' : 'Todite | Settings'))) }</title>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="keywords" content="todite, todo, to-do, todo list, to-do list, todolist, todo-list, todo-app" />

@@ -1,28 +1,20 @@
 import React, { useState, useEffect } from 'react';
 
-import firebaseTypes from 'firebase/app';
 import { Theme } from '../types/settings';
 
-import { useAuthState } from 'react-firebase-hooks/auth';
-
-import firebase from '../utils/firebase';
 import getSettings from '../utils/get-settings';
 
 import MetaData from '../components/MetaData';
 import Header from '../components/Header';
 import Buttons from '../components/Buttons';
 import About from '../components/About';
+import ApiDocs from '../components/ApiDocs';
 import Creator from '../components/Creator';
 
 const Home = (): React.ReactElement<{
     children: React.ReactNode;
 }, 'div'> => {
-    const isSSR = typeof window === 'undefined';
-
     const [theme, setTheme] = useState<Theme>('system');
-
-    const auth = isSSR ? undefined : firebase.auth();
-    const [user] = isSSR ? [] : useAuthState(auth) as [firebaseTypes.User | undefined, boolean, firebaseTypes.auth.Error | undefined];
 
     useEffect(() => {
         (async () => {
@@ -42,16 +34,13 @@ const Home = (): React.ReactElement<{
         }
     }, [theme]);
 
-    if (user) {
-        window.location.replace('/todos');
-    }
-
     return (
         <div>
             <MetaData page="about" />
             <Header page="about" />
             <Buttons />
             <About />
+            <ApiDocs />
             <Creator />
         </div>
     );
