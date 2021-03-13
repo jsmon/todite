@@ -112,6 +112,24 @@ const CliDocsV01 = () => {
                         </ul>
                     </section>
                 </section>
+                <section id="delete" className="delete p-2">
+                    <h2 className="font-bold text-2xl"><code>$ todite delete</code></h2>
+                    <section className="description p-2">
+                        <p>The <code>delete</code> command deletes one of a user's to-dos.</p>
+                    </section>
+                    <section className="options p-2">
+                        <h2 className="font-bold text-2xl">Options</h2>
+                        Required options:
+                        <ul>
+                            <li>
+                                <code>-a</code> or <code>--api-key</code> - <code>string</code> - Your API Key
+                            </li>
+                            <li>
+                                <code>-id</code> or <code>--todo-id</code> - <code>string</code> - The to-dos ID
+                            </li>
+                        </ul>
+                    </section>
+                </section>
             </main>
         </div>
     );
