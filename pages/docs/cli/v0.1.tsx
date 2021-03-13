@@ -49,6 +49,21 @@ const CliDocsV01 = () => {
                     <pre><code>$ npx todite some-command</code></pre>
                     <p>(same as running <code>todite some-command</code> if you installed it with npm)</p>
                 </section>
+                <section id="get-all" className="get-all p-2">
+                    <h2 className="font-bold text-2xl"><code>$ todite get-all</code></h2>
+                    <section className="description p-2">
+                        <p>The <code>get-all</code> command get's all of a user's to-dos.</p>
+                    </section>
+                    <section className="options p-2">
+                        <h2 className="font-bold text-2xl">Options</h2>
+                        Required options:
+                        <ul>
+                            <li>
+                                <code>-a</code>  or <code>--api-key</code> - <code>string</code> - Your API Key
+                            </li>
+                        </ul>
+                    </section>
+                </section>
             </main>
         </div>
     );
