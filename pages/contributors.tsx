@@ -41,7 +41,7 @@ const ContributorsPage = ({ contributors }: ContributorsPageProps) => {
             <MetaData page="contributors" />
             <Header page="contributors" />
             <main className="p-2">
-                <p>Thank you to all Todite contributors, without you, Todite would probably not have gone anywhere!</p>
+                <p>Thank you to all Todite contributors!</p>
                 <ul className="py-2">
                     { contributors.map(contributor => (
                         <li key={contributor.github}>
