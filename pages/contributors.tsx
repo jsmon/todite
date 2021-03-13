@@ -41,7 +41,7 @@ const ContributorsPage = ({ contributors }: ContributorsPageProps) => {
             <MetaData page="contributors" />
             <Header page="contributors" />
             <main className="p-2">
-                <p>Thank you to all Todite contributors, without you, Todite would probably not have gone anywhere!</p>
+                <p>Thank you to all Todite contributors!</p>
                 <ul className="py-2">
                     { contributors.map(contributor => (
                         <li key={contributor.github}>
@@ -49,14 +49,23 @@ const ContributorsPage = ({ contributors }: ContributorsPageProps) => {
                                 <a className="text-blue-600 hover:underline focus:underline">{ contributor.name }</a>
                             </Link>
                             { ' ' }
-                            (<Link href={`https://github.com/jsmon/todite/commits?author=${contributor.github}`}>
+                            { contributor.contributedTo.length === 1 ? <>{ '(' }<Link href={`https://github.com/jsmon/todite${contributor.contributedTo[0] === 'npm' ? '-npm' : ''}/commits?author=${contributor.github}`}>
                                 <a className="text-blue-600 hover:underline focus:underline">{ new Intl.NumberFormat('en-GB').format(contributor.contributions) } contribution{ contributor.contributions === 1 ? '' : 's' }</a>
-                            </Link>)
+                            </Link>{')'}</> : <>{'('}
+                                <>
+                                    <Link href={`https://github.com/jsmon/todite/commits?author=${contributor.github}`}>
+                                        <a className="text-blue-600 hover:underline focus:underline">{ new Intl.NumberFormat('en-GB').format(contributor.contributions) }</a>
+                                    </Link>
+                                    { ' ' }
+                                    <Link href={`https://github.com/jsmon/todite-npm/commits?author=${contributor.github}`}>
+                                        <a className="text-blue-600 hover:underline focus:underline">contribution{ contributor.contributions === 1 ? '' : 's' }</a>
+                                    </Link>
+                                </>{ ')' }</> }
                         </li>
                     )) }
                 </ul>
                 <p>If you want to contribute to the project, feel free to <Link href="https://github.com/jsmon/todite"><a className="text-blue-600 hover:underline focus:underline">submit a pull request</a></Link>.</p>
-                { contributors.length === 1 && <p>It looks like I'm still the only contributor (which is probably why it looks so bad)</p> }
+                { contributors.length === 1 && <p>It looks like I'm still the only contributor (which is probably why the app looks so bad, I'm not the best at CSS. Please open a PR to add some better styles and your name can be here!)</p> }
             </main>
         </div>
     );

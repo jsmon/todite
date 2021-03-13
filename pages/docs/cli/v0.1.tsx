@@ -52,7 +52,7 @@ const CliDocsV01 = () => {
                 <section id="get-all" className="get-all p-2">
                     <h2 className="font-bold text-2xl"><code>$ todite get-all</code></h2>
                     <section className="description p-2">
-                        <p>The <code>get-all</code> command get's all of a user's to-dos.</p>
+                        <p>The <code>get-all</code> command gets all of a user's to-dos.</p>
                     </section>
                     <section className="options p-2">
                         <h2 className="font-bold text-2xl">Options</h2>
@@ -67,7 +67,7 @@ const CliDocsV01 = () => {
                 <section id="get" className="get p-2">
                     <h2 className="font-bold text-2xl"><code>$ todite get</code></h2>
                     <section className="description p-2">
-                        <p>The <code>get</code> command get's one of a user's to-dos.</p>
+                        <p>The <code>get</code> command gets one of a user's to-dos.</p>
                     </section>
                     <section className="options p-2">
                         <h2 className="font-bold text-2xl">Options</h2>
@@ -78,6 +78,81 @@ const CliDocsV01 = () => {
                             </li>
                             <li>
                                 <code>-id</code> or <code>--todo-id</code> - <code>string</code> - The to-dos ID
+                            </li>
+                        </ul>
+                    </section>
+                </section>
+                <section id="update" className="update p-2">
+                    <h2 className="font-bold text-2xl"><code>$ todite update</code></h2>
+                    <section className="description p-2">
+                        <p>The <code>update</code> command updates one of a user's to-dos.</p>
+                    </section>
+                    <section className="options p-2">
+                        <h2 className="font-bold text-2xl">Options</h2>
+                        Required options:
+                        <ul>
+                            <li>
+                                <code>-a</code> or <code>--api-key</code> - <code>string</code> - Your API Key
+                            </li>
+                            <li>
+                                <code>-id</code> or <code>--todo-id</code> - <code>string</code> - The to-dos ID
+                            </li>
+                        </ul>
+                        Optional options:
+                        <ul>
+                            <li>
+                                <code>-n</code> or <code>--name</code> - <code>string</code> - The to-dos new name
+                            </li>
+                            <li>
+                                <code>-c</code> or <code>--completed</code> - <code>boolean</code> - Whether the updated to-do has been completed
+                            </li>
+                            <li>
+                                <code>-d</code> or <code>--date</code> - ISO formatted date string - The to-dos updated date
+                            </li>
+                        </ul>
+                    </section>
+                </section>
+                <section id="delete" className="delete p-2">
+                    <h2 className="font-bold text-2xl"><code>$ todite delete</code></h2>
+                    <section className="description p-2">
+                        <p>The <code>delete</code> command deletes one of a user's to-dos.</p>
+                    </section>
+                    <section className="options p-2">
+                        <h2 className="font-bold text-2xl">Options</h2>
+                        Required options:
+                        <ul>
+                            <li>
+                                <code>-a</code> or <code>--api-key</code> - <code>string</code> - Your API Key
+                            </li>
+                            <li>
+                                <code>-id</code> or <code>--todo-id</code> - <code>string</code> - The to-dos ID
+                            </li>
+                        </ul>
+                    </section>
+                </section>
+                <section id="create" className="create p-2">
+                    <h2 className="font-bold text-2xl"><code>$ todite create</code></h2>
+                    <section className="description p-2">
+                        <p>The <code>create</code> command creates a new to-do.</p>
+                    </section>
+                    <section className="options p-2">
+                        <h2 className="font-bold text-2xl">Options</h2>
+                        Required options:
+                        <ul>
+                            <li>
+                                <code>-a</code> or <code>--api-key</code> - <code>string</code> - Your API Key
+                            </li>
+                            <li>
+                                <code>-n</code> or <code>--name</code> - <code>string</code> - The to-dos name
+                            </li>
+                        </ul>
+                        Optional options:
+                        <ul>
+                            <li>
+                                <code>-c</code> or <code>--completed</code> - <code>boolean</code> - Whether the updated to-do has been completed
+                            </li>
+                            <li>
+                                <code>-d</code> or <code>--date</code> - ISO formatted date string - The to-dos updated date
                             </li>
                         </ul>
                     </section>

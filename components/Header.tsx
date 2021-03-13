@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface HeaderProps {
-    page: 'about' | 'todos' | 'sign-in' | 'sign-up' | 'settings' | 'api-key' | 'api-docs' | 'contributors';
+    page: 'about' | 'todos' | 'sign-in' | 'sign-up' | 'settings' | 'api-key' | 'api-docs' | 'contributors' | '404';
     apiPage?: 'rest' | 'npm' | 'cli';
     apiVersion?: 'v1' | 'v0.1';
 }
@@ -27,8 +27,10 @@ const Header = ({ page, apiPage, apiVersion }: HeaderProps): React.ReactElement<
         title = 'Your API Key';
     } else if (page === 'contributors') {
         title = 'Todite Contributors';
-    } else {
+    } else if (page === 'settings') {
         title = 'Settings';
+    } else {
+        title = '404 Not Found';
     }
 
     return (

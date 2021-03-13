@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 
 import Link from 'next/link';
 
-import firebaseTypes from 'firebase/app';
 import { Theme } from '../types/settings';
 
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -21,7 +20,7 @@ const SettingsPage = (): React.ReactElement<{
 }, 'main'> => {
     const isSSR = typeof window === 'undefined';
     const auth = isSSR ? undefined : firebase.auth();
-    const [user, loading] = isSSR ? [] : useAuthState(auth) as [firebaseTypes.User | undefined, boolean, firebaseTypes.auth.Error | undefined];
+    const [user, loading] = isSSR ? [] : useAuthState(auth) as [firebase.User | undefined, boolean, firebase.auth.Error | undefined];
 
     const [theme, setTheme] = useState<Theme>('system');
     const [deleteTodoOnCompleted, setDeleteTodoOnCompleted] = useState(false);

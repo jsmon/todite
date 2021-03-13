@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 
-import firebaseTypes from 'firebase/app';
 import { Theme } from '../types/settings';
 
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -26,7 +25,7 @@ const TodosPage = (): React.ReactElement<{
     const [deleteTodoOnCompleted, setDeleteTodoOnCompleted] = useState(false);
 
     const auth = isSSR ? undefined : firebase.auth();
-    const [user, loading] = isSSR ? [] : useAuthState(auth) as [firebaseTypes.User | undefined, boolean, firebaseTypes.auth.Error | undefined];
+    const [user, loading] = isSSR ? [] : useAuthState(auth) as [firebase.User | undefined, boolean, firebase.auth.Error | undefined];
     
     useEffect(() => {
         if (!user) return;

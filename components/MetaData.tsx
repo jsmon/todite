@@ -3,7 +3,7 @@ import React from 'react';
 import Head from 'next/head';
 
 interface MetaDataProps {
-    page: 'about' | 'sign-in' | 'sign-up' | 'todos' | 'settings' | 'api-key' | 'api-docs' | 'contributors';
+    page: 'about' | 'sign-in' | 'sign-up' | 'todos' | 'settings' | 'api-key' | 'api-docs' | 'contributors' | '404';
     apiPage?: 'rest' | 'npm' | 'cli';
     apiVersion?: 'v1' | 'v0.1';
 }
@@ -26,8 +26,10 @@ const MetaData = ({ page, apiPage, apiVersion }: MetaDataProps) => {
         title = 'Todite Dev | Your API Key';
     } else if (page === 'contributors') {
         title = 'Todite | Contributors';
-    } else {
+    } else if (page === 'settings') {
         title = 'Todite | Settings';
+    } else {
+        title = 'Todite | 404 Not Found';
     }
 
     let description: string;
@@ -41,8 +43,10 @@ const MetaData = ({ page, apiPage, apiVersion }: MetaDataProps) => {
         description = 'See or regenerate your API key for the Todite REST API / npm package';
     } else if (page === 'contributors') {
         description = 'See a list of all of the people who made Todite possible';
-    } else {
+    } else if (page === 'settings') {
         description = 'Update your settings for the Todite app';
+    } else {
+        description = 'The Todite 404 not found error page';
     }
 
     return (
