@@ -9,7 +9,9 @@ import { Theme } from '../../../types/settings';
 import Header from '../../../components/Header';
 import MetaData from '../../../components/MetaData';
 
-const ApiDocsV1 = () => {
+const ApiDocsV1 = (): React.ReactElement<{
+    children: React.ReactNode;
+}, 'div'> => {
     const [theme, setTheme] = useState<Theme>('system');
     useEffect(() => {
         (async () => {

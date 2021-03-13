@@ -25,8 +25,8 @@ const TodosPage = (): React.ReactElement<{
     const [deleteTodoOnCompleted, setDeleteTodoOnCompleted] = useState(false);
 
     const auth = isSSR ? undefined : firebase.auth();
-    const [user, loading] = isSSR ? [] : useAuthState(auth) as [firebase.User | undefined, boolean, firebase.auth.Error | undefined];
-    
+    const [user, loading] = isSSR ? [] : useAuthState(auth!);
+
     useEffect(() => {
         if (!user) return;
 
@@ -88,7 +88,7 @@ const TodosPage = (): React.ReactElement<{
             <MetaData page="todos" />
             <Header page="todos" />
             <Link href="/settings"><a><i className="absolute top-2 left-2"><FontAwesomeIcon icon={faCog} /></i></a></Link>
-            <Todos user={user} deleteTodoOnCompleted={deleteTodoOnCompleted} />
+            <Todos user={user ?? undefined} deleteTodoOnCompleted={deleteTodoOnCompleted} />
         </div>
     ); 
 };

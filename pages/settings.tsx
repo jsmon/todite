@@ -20,7 +20,7 @@ const SettingsPage = (): React.ReactElement<{
 }, 'main'> => {
     const isSSR = typeof window === 'undefined';
     const auth = isSSR ? undefined : firebase.auth();
-    const [user, loading] = isSSR ? [] : useAuthState(auth) as [firebase.User | undefined, boolean, firebase.auth.Error | undefined];
+    const [user, loading] = isSSR ? [] : useAuthState(auth!);
 
     const [theme, setTheme] = useState<Theme>('system');
     const [deleteTodoOnCompleted, setDeleteTodoOnCompleted] = useState(false);

@@ -19,7 +19,7 @@ const SignIn = (): React.ReactElement<{
     const [theme, setTheme] = useState<Theme>('system');
 
     const auth = isSSR ? undefined : firebase.auth();
-    const [user] = isSSR ? [] : useAuthState(auth) as [firebase.User | undefined, boolean, firebase.auth.Error | undefined];
+    const [user] = isSSR ? [] : useAuthState(auth!);
 
     if (user) {
         window.location.replace('/todos');

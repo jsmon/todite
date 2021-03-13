@@ -1,7 +1,7 @@
-define("./workbox-98be7402.js",['exports'], function (exports) { 'use strict';
+define("./workbox-d6d90c3a.js",['exports'], function (exports) { 'use strict';
 
     try {
-      self['workbox:core:6.1.0'] && _();
+      self['workbox:core:6.1.1'] && _();
     } catch (e) {}
 
     /*
@@ -76,7 +76,7 @@ define("./workbox-98be7402.js",['exports'], function (exports) { 'use strict';
       license that can be found in the LICENSE file or at
       https://opensource.org/licenses/MIT.
     */
-    const messages = {
+    const messages$1 = {
       'invalid-value': ({
         paramName,
         validValueDescription,
@@ -356,7 +356,7 @@ define("./workbox-98be7402.js",['exports'], function (exports) { 'use strict';
     */
 
     const generatorFunction = (code, details = {}) => {
-      const message = messages[code];
+      const message = messages$1[code];
 
       if (!message) {
         throw new Error(`Unable to find message for code '${code}'.`);
@@ -476,7 +476,7 @@ define("./workbox-98be7402.js",['exports'], function (exports) { 'use strict';
     };
 
     try {
-      self['workbox:routing:6.1.0'] && _();
+      self['workbox:routing:6.1.1'] && _();
     } catch (e) {}
 
     /*
@@ -1487,7 +1487,7 @@ define("./workbox-98be7402.js",['exports'], function (exports) { 'use strict';
     }
 
     try {
-      self['workbox:strategies:6.1.0'] && _();
+      self['workbox:strategies:6.1.1'] && _();
     } catch (e) {}
 
     function toRequest(input) {
@@ -1592,8 +1592,8 @@ define("./workbox-98be7402.js",['exports'], function (exports) { 'use strict';
       }
       /**
        * Fetches a given request (and invokes any applicable plugin callback
-       * methods) using the `fetchOptions` and `plugins` defined on the strategy
-       * object.
+       * methods) using the `fetchOptions` (for non-navigation requests) and
+       * `plugins` defined on the `Strategy` object.
        *
        * The following plugin lifecycle methods are invoked when using this method:
        * - `requestWillFetch()`
@@ -2078,8 +2078,9 @@ define("./workbox-98be7402.js",['exports'], function (exports) { 'use strict';
        * @param {Array<Object>} [options.plugins] [Plugins]{@link https://developers.google.com/web/tools/workbox/guides/using-plugins}
        * to use in conjunction with this caching strategy.
        * @param {Object} [options.fetchOptions] Values passed along to the
-       * [`init`]{@link https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch#Parameters}
-       * of all fetch() requests made by this strategy.
+       * [`init`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch#Parameters)
+       * of [non-navigation](https://github.com/GoogleChrome/workbox/issues/1796)
+       * `fetch()` requests made by this strategy.
        * @param {Object} [options.matchOptions] The
        * [`CacheQueryOptions`]{@link https://w3c.github.io/ServiceWorker/#dictdef-cachequeryoptions}
        * for any `cache.match()` or `cache.put()` calls made by this strategy.
@@ -2305,7 +2306,7 @@ define("./workbox-98be7402.js",['exports'], function (exports) { 'use strict';
       license that can be found in the LICENSE file or at
       https://opensource.org/licenses/MIT.
     */
-    const messages$1 = {
+    const messages = {
       strategyStart: (strategyName, request) => `Using ${strategyName} to respond to '${getFriendlyURL(request.url)}'`,
       printFinalResponse: response => {
         if (response) {
@@ -2344,7 +2345,8 @@ define("./workbox-98be7402.js",['exports'], function (exports) { 'use strict';
        * to use in conjunction with this caching strategy.
        * @param {Object} [options.fetchOptions] Values passed along to the
        * [`init`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch#Parameters)
-       * of all fetch() requests made by this strategy.
+       * of [non-navigation](https://github.com/GoogleChrome/workbox/issues/1796)
+       * `fetch()` requests made by this strategy.
        * @param {number} [options.networkTimeoutSeconds] If set, any network requests
        * that fail to respond within the timeout will result in a network error.
        */
@@ -2392,7 +2394,7 @@ define("./workbox-98be7402.js",['exports'], function (exports) { 'use strict';
         }
 
         {
-          logger.groupCollapsed(messages$1.strategyStart(this.constructor.name, request));
+          logger.groupCollapsed(messages.strategyStart(this.constructor.name, request));
 
           if (response) {
             logger.log(`Got response from network.`);
@@ -2400,7 +2402,7 @@ define("./workbox-98be7402.js",['exports'], function (exports) { 'use strict';
             logger.log(`Unable to get a response from the network.`);
           }
 
-          messages$1.printFinalResponse(response);
+          messages.printFinalResponse(response);
           logger.groupEnd();
         }
 
@@ -2439,4 +2441,4 @@ define("./workbox-98be7402.js",['exports'], function (exports) { 'use strict';
     exports.registerRoute = registerRoute;
 
 });
-//# sourceMappingURL=workbox-98be7402.js.map
+//# sourceMappingURL=workbox-d6d90c3a.js.map
