@@ -10,10 +10,12 @@ import getSettings from '../../utils/get-settings';
 import MetaData from '../../components/MetaData';
 import Header from '../../components/Header';
 
-const ApiKey = () => {
+const ApiKey = (): React.ReactElement<{
+    children: React.ReactNode;
+}> | null => {
     const isSSR = typeof window === 'undefined';
     const auth = isSSR ? undefined : firebase.auth();
-    const [user, loading] = isSSR ? [] : useAuthState(auth) as [firebase.User | undefined, boolean, firebase.auth.Error | undefined];
+    const [user, loading] = isSSR ? [] : useAuthState(auth!);
 
     const [theme, setTheme] = useState<Theme>('system');
     const [apiKey, setApiKey] = useState<string | null>(null);

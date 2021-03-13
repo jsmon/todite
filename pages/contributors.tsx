@@ -14,7 +14,9 @@ interface ContributorsPageProps {
     contributors: Contributor[];
 }
 
-const ContributorsPage = ({ contributors }: ContributorsPageProps) => {
+const ContributorsPage = ({ contributors }: ContributorsPageProps): React.ReactElement<{
+    children: React.ReactNode;
+}, 'div'> => {
     const [theme, setTheme] = useState<Theme>('system');
 
     useEffect(() => {
