@@ -49,9 +49,18 @@ const ContributorsPage = ({ contributors }: ContributorsPageProps) => {
                                 <a className="text-blue-600 hover:underline focus:underline">{ contributor.name }</a>
                             </Link>
                             { ' ' }
-                            (<Link href={`https://github.com/jsmon/todite/commits?author=${contributor.github}`}>
+                            { contributor.contributedTo.length === 1 ? <>{ '(' }<Link href={`https://github.com/jsmon/todite${contributor.contributedTo[0] === 'npm' ? '-npm' : ''}/commits?author=${contributor.github}`}>
                                 <a className="text-blue-600 hover:underline focus:underline">{ new Intl.NumberFormat('en-GB').format(contributor.contributions) } contribution{ contributor.contributions === 1 ? '' : 's' }</a>
-                            </Link>)
+                            </Link>{')'}</> : <>{'('}
+                                <>
+                                    <Link href={`https://github.com/jsmon/todite/commits?author=${contributor.github}`}>
+                                        <a className="text-blue-600 hover:underline focus:underline">{ new Intl.NumberFormat('en-GB').format(contributor.contributions) }</a>
+                                    </Link>
+                                    { ' ' }
+                                    <Link href={`https://github.com/jsmon/todite-npm/commits?author=${contributor.github}`}>
+                                        <a className="text-blue-600 hover:underline focus:underline">contribution{ contributor.contributions === 1 ? '' : 's' }</a>
+                                    </Link>
+                                </>{ ')' }</> }
                         </li>
                     )) }
                 </ul>

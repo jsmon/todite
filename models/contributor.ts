@@ -16,6 +16,10 @@ const contributorSchema = new mongoose.Schema<IContributor>({
     contributions: {
         type: Number,
         required: true
+    },
+    contributedTo: {
+        type: [String],
+        requred: true
     }
 });
 
