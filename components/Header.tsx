@@ -2,7 +2,7 @@ import React from 'react';
 
 interface HeaderProps {
     page: 'about' | 'todos' | 'sign-in' | 'sign-up' | 'settings' | 'api-key' | 'api-docs' | 'contributors';
-    apiPage?: 'rest' | 'npm';
+    apiPage?: 'rest' | 'npm' | 'cli';
     apiVersion?: 'v1' | 'v0.1';
 }
 
@@ -16,7 +16,13 @@ const Header = ({ page, apiPage, apiVersion }: HeaderProps): React.ReactElement<
     } else if (page === 'sign-in' || page === 'sign-up') {
         title = `Sign ${page === 'sign-in' ? 'In to' : 'Up for'} Todite`;
     } else if (page === 'api-docs') {
-        title = `${apiPage === 'rest' ? 'REST API' : 'npm package'} ${apiVersion}`;
+        if (apiPage === 'rest') {
+            title = `REST API ${apiVersion}`;
+        } else if (apiPage === 'npm') {
+            title = `npm package ${apiVersion}`;
+        } else {
+            title = `CLI ${apiVersion}`;
+        }
     } else if (page === 'api-key') {
         title = 'Your API Key';
     } else if (page === 'contributors') {

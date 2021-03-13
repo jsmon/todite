@@ -4,7 +4,7 @@ import Head from 'next/head';
 
 interface MetaDataProps {
     page: 'about' | 'sign-in' | 'sign-up' | 'todos' | 'settings' | 'api-key' | 'api-docs' | 'contributors';
-    apiPage?: 'rest' | 'npm';
+    apiPage?: 'rest' | 'npm' | 'cli';
     apiVersion?: 'v1' | 'v0.1';
 }
 
@@ -15,7 +15,13 @@ const MetaData = ({ page, apiPage, apiVersion }: MetaDataProps) => {
     } else if (page === 'sign-in' || page === 'sign-up') {
         title = `Todite | Sign ${page === 'sign-in' ? 'In' : 'Up'}`;
     } else if (page === 'api-docs') {
-        title = `Todite Dev | ${apiPage === 'rest' ? 'REST API' : 'npm package'} ${apiVersion}`;
+        if (apiPage === 'rest') {
+            title = `Todite Dev | REST API ${apiVersion}`;
+        } else if (apiPage === 'npm') {
+            title = `Todite Dev | npm package ${apiVersion}`;
+        } else {
+            title = `Todite Dev | CLI ${apiVersion}`;
+        }
     } else if (page === 'api-key') {
         title = 'Todite Dev | Your API Key';
     } else if (page === 'contributors') {

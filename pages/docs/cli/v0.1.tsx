@@ -1,0 +1,57 @@
+import React, { useState, useEffect } from 'react';
+
+import Link from 'next/link';
+
+import getSettings from '../../../utils/get-settings';
+
+import { Theme } from '../../../types/settings';
+
+import Header from '../../../components/Header';
+import MetaData from '../../../components/MetaData';
+
+const CliDocsV01 = () => {
+    const [theme, setTheme] = useState<Theme>('system');
+
+    useEffect(() => {
+        (async () => {
+            const settings = await getSettings();
+            setTheme(settings.theme);
+        })();
+    }, []);
+    useEffect(() => {
+        document.querySelector('html')!.classList.remove('dark', 'light');
+
+        if (theme === 'system') {
+            const newTheme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+            document.querySelector('html')!.classList.add(newTheme);
+        } else {
+            document.querySelector('html')!.classList.add(theme);
+        }
+    }, [theme]);
+
+    return (
+        <div>
+            <MetaData page="api-docs" apiPage="cli" apiVersion="v0.1" />
+            <Header page="api-docs" apiPage="cli" apiVersion="v0.1" />
+            <main>
+                <section id="description" className="description p-2">
+                    <p>This is a CLI that you can use to access the <Link href="/docs/api/v1"><a className="text-blue-600 hover:underline focus:underline">Todite API</a></Link> through the command line.</p>
+                </section>
+                <section id="requirements" className="requirements p-2">
+                    <h2 className="font-bold text-2xl">Requirements</h2>
+                    <p>To use this CLI you must have at least <a href="https://nodejs.org/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline focus:underline">Node.js</a> v10.13 or later, and <a href="https://www.npmjs.com/package/npm" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline focus:underline">npm</a> v5.2 or later. (npm comes built in with Node.js, so you don't need to worry about installing it yourself)</p>
+                </section>
+                <section id="installation" className="installation p-2">
+                    <h2 className="font-bold text-2xl">Installation</h2>
+                    <p>You can install the CLI through npm:</p>
+                    <pre><code>$ npm install -g todite@latest</code></pre>
+                    <p>and then use the global <code>todite</code> command anywhere on your computer, or you could use <code>npx</code> if you don't want to install <code>todite</code> on your computer:</p>
+                    <pre><code>$ npx todite some-command</code></pre>
+                    <p>(same as running <code>todite some-command</code> if you installed it with npm)</p>
+                </section>
+            </main>
+        </div>
+    );
+};
+
+export default CliDocsV01;
