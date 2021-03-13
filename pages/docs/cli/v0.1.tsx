@@ -59,7 +59,25 @@ const CliDocsV01 = () => {
                         Required options:
                         <ul>
                             <li>
-                                <code>-a</code>  or <code>--api-key</code> - <code>string</code> - Your API Key
+                                <code>-a</code> or <code>--api-key</code> - <code>string</code> - Your API Key
+                            </li>
+                        </ul>
+                    </section>
+                </section>
+                <section id="get" className="get p-2">
+                    <h2 className="font-bold text-2xl"><code>$ todite get</code></h2>
+                    <section className="description p-2">
+                        <p>The <code>get</code> command get's one of a user's to-dos.</p>
+                    </section>
+                    <section className="options p-2">
+                        <h2 className="font-bold text-2xl">Options</h2>
+                        Required options:
+                        <ul>
+                            <li>
+                                <code>-a</code> or <code>--api-key</code> - <code>string</code> - Your API Key
+                            </li>
+                            <li>
+                                <code>-id</code> or <code>--todo-id</code> - <code>string</code> - The to-dos ID
                             </li>
                         </ul>
                     </section>
