@@ -56,7 +56,7 @@ const ContributorsPage = ({ contributors }: ContributorsPageProps) => {
                     )) }
                 </ul>
                 <p>If you want to contribute to the project, feel free to <Link href="https://github.com/jsmon/todite"><a className="text-blue-600 hover:underline focus:underline">submit a pull request</a></Link>.</p>
-                { contributors.length === 1 && <p>It looks like I'm still the only contributor (which is probably why it looks so bad)</p> }
+                { contributors.length === 1 && <p>It looks like I'm still the only contributor (which is probably why the app looks so bad, I'm not the best at CSS. Please open a PR to add some better styles and your name can be here!)</p> }
             </main>
         </div>
     );
