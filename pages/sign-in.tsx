@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 
 import { useAuthState } from 'react-firebase-hooks/auth';
 
-import firebaseTypes from 'firebase/app';
 import { Theme } from '../types/settings';
 
 import firebase from '../utils/firebase';
@@ -20,7 +19,7 @@ const SignIn = (): React.ReactElement<{
     const [theme, setTheme] = useState<Theme>('system');
 
     const auth = isSSR ? undefined : firebase.auth();
-    const [user] = isSSR ? [] : useAuthState(auth) as [firebaseTypes.User | undefined, boolean, firebaseTypes.auth.Error | undefined];
+    const [user] = isSSR ? [] : useAuthState(auth) as [firebase.User | undefined, boolean, firebase.auth.Error | undefined];
 
     if (user) {
         window.location.replace('/todos');
