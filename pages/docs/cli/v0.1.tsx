@@ -130,6 +130,33 @@ const CliDocsV01 = () => {
                         </ul>
                     </section>
                 </section>
+                <section id="create" className="create p-2">
+                    <h2 className="font-bold text-2xl"><code>$ todite create</code></h2>
+                    <section className="description p-2">
+                        <p>The <code>create</code> command creates a new to-do.</p>
+                    </section>
+                    <section className="options p-2">
+                        <h2 className="font-bold text-2xl">Options</h2>
+                        Required options:
+                        <ul>
+                            <li>
+                                <code>-a</code> or <code>--api-key</code> - <code>string</code> - Your API Key
+                            </li>
+                            <li>
+                                <code>-n</code> or <code>--name</code> - <code>string</code> - The to-dos name
+                            </li>
+                        </ul>
+                        Optional options:
+                        <ul>
+                            <li>
+                                <code>-c</code> or <code>--completed</code> - <code>boolean</code> - Whether the updated to-do has been completed
+                            </li>
+                            <li>
+                                <code>-d</code> or <code>--date</code> - ISO formatted date string - The to-dos updated date
+                            </li>
+                        </ul>
+                    </section>
+                </section>
             </main>
         </div>
     );
