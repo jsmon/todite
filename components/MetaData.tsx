@@ -5,7 +5,7 @@ import Head from 'next/head';
 interface MetaDataProps {
     page: 'about' | 'sign-in' | 'sign-up' | 'todos' | 'settings' | 'api-key' | 'api-docs' | 'contributors' | '404';
     apiPage?: 'rest' | 'npm' | 'cli';
-    apiVersion?: 'v1' | 'v0.1';
+    apiVersion?: 'v1' | 'v0.1' | 'v1.0';
 }
 
 const MetaData = ({ page, apiPage, apiVersion }: MetaDataProps) => {
