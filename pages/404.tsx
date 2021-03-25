@@ -74,6 +74,7 @@ const NotFoundPage = (): React.ReactElement<{
                         <ul>
                             <li>
                                 <Link href="/docs/npm/v0.1"><a className="text-blue-600 hover:underline focus:underline">v0.1</a></Link>
+                                <Link href="/docs/npm/v1.0"><a className="text-blue-600 hover:underline focus:underline">v1.0</a></Link>
                             </li>
                         </ul>
                     </section>
@@ -82,6 +83,7 @@ const NotFoundPage = (): React.ReactElement<{
                         <ul>
                             <li>
                                 <Link href="/docs/cli/v0.1"><a className="text-blue-600 hover:underline focus:underline">v0.1</a></Link>
+                                <Link href="/docs/cli/v1.0"><a className="text-blue-600 hover:underline focus:underline">v1.0</a></Link>
                             </li>
                         </ul>
                     </section>
