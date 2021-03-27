@@ -11,7 +11,7 @@ interface MetaDataProps {
 const MetaData = ({ page, apiPage, apiVersion }: MetaDataProps) => {
     let title: string;
     if (page === 'about' || page === 'todos') {
-        title = 'Todite | Organize your day';
+        title = 'Todite | Organise your day';
     } else if (page === 'sign-in' || page === 'sign-up') {
         title = `Todite | Sign ${page === 'sign-in' ? 'In' : 'Up'}`;
     } else if (page === 'api-docs') {
