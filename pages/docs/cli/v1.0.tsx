@@ -36,6 +36,14 @@ const CliDocsV10 = (): React.ReactElement<{
             <MetaData page="api-docs" apiPage="cli" apiVersion="v1.0" />
             <Header page="api-docs" apiPage="cli" apiVersion="v1.0" />
             <main>
+                <section id="other-versions" className="other-versions p-2">
+                    <h2 className="font-bold text-2xl">Other versions</h2>
+                    <ul>
+                        <li>
+                            <Link href="/docs/cli/v0.1"><a className="text-blue-600 hover:underline focus:underline">v0.1</a></Link>
+                        </li>
+                    </ul>
+                </section>
                 <section id="description" className="description p-2">
                     <p>This is a CLI that you can use to access the <Link href="/docs/api/v1"><a className="text-blue-600 hover:underline focus:underline">Todite API</a></Link> through the command line.</p>
                 </section>

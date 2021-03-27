@@ -50,13 +50,20 @@ const NpmDocsV01 = (): React.ReactElement<{
     const codeFunctionStyle = {
         color: '#56B6C2'
     };
-    
 
     return (
         <div>
             <MetaData page="api-docs" apiPage="npm" apiVersion="v0.1" />
             <Header page="api-docs" apiPage="npm" apiVersion="v0.1" />
             <main>
+                <section id="other-versions" className="other-versions p-2">
+                    <h2 className="font-bold text-2xl">Other versions</h2>
+                    <ul>
+                        <li>
+                            <Link href="/docs/npm/v1.0"><a className="text-blue-600 hover:underline focus:underline">v1.0 (latest)</a></Link>
+                        </li>
+                    </ul>
+                </section>
                 <section id="description" className="description p-2">
                     <p><code>todite</code> is an npm package created to let you intergrate your JavaScript / TypeScript projects with Todite.</p>
                 </section>
