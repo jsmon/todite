@@ -35,8 +35,6 @@ const ContributorsPage = ({ contributors }: ContributorsPageProps): React.ReactE
             document.querySelector('html')!.classList.add(theme);
         }
     }, [theme]);
-
-
     
     return (
         <div>

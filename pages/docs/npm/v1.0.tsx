@@ -9,7 +9,7 @@ import { Theme } from '../../../types/settings';
 import Header from '../../../components/Header';
 import MetaData from '../../../components/MetaData';
 
-const NpmDocsV01 = (): React.ReactElement<{
+const NpmDocsV10 = (): React.ReactElement<{
     children: React.ReactNode;
 }, 'div'> => {
     const [theme, setTheme] = useState<Theme>('system');
@@ -50,17 +50,18 @@ const NpmDocsV01 = (): React.ReactElement<{
     const codeFunctionStyle = {
         color: '#56B6C2'
     };
+    
 
     return (
         <div>
-            <MetaData page="api-docs" apiPage="npm" apiVersion="v0.1" />
-            <Header page="api-docs" apiPage="npm" apiVersion="v0.1" />
+            <MetaData page="api-docs" apiPage="npm" apiVersion="v1.0" />
+            <Header page="api-docs" apiPage="npm" apiVersion="v1.0" />
             <main>
                 <section id="other-versions" className="other-versions p-2">
                     <h2 className="font-bold text-2xl">Other versions</h2>
                     <ul>
                         <li>
-                            <Link href="/docs/npm/v1.0"><a className="text-blue-600 hover:underline focus:underline">v1.0 (latest)</a></Link>
+                            <Link href="/docs/npm/v0.1"><a className="text-blue-600 hover:underline focus:underline">v0.1</a></Link>
                         </li>
                     </ul>
                 </section>
@@ -140,4 +141,4 @@ const NpmDocsV01 = (): React.ReactElement<{
     );
 };
 
-export default NpmDocsV01;
+export default NpmDocsV10;

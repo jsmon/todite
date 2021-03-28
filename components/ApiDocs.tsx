@@ -13,8 +13,8 @@ const ApiDocs = (): React.ReactElement<{
         <ul>
             <li><Link href="/docs/api-key"><a className="text-blue-600 hover:underline focus:underline">Your API Key</a></Link></li>
             <li><Link href="/docs/api/v1"><a className="text-blue-600 hover:underline focus:underline">REST API</a></Link></li>
-            <li><Link href="/docs/npm/v0.1"><a className="text-blue-600 hover:underline focus:underline">npm package</a></Link></li>
-            <li><Link href="/docs/cli/v0.1"><a className="text-blue-600 hover:underline focus:underline">CLI</a></Link></li>
+            <li><Link href="/docs/npm/v1.0"><a className="text-blue-600 hover:underline focus:underline">npm package</a></Link></li>
+            <li><Link href="/docs/cli/v1.0"><a className="text-blue-600 hover:underline focus:underline">CLI</a></Link></li>
         </ul>
     </div>
 );

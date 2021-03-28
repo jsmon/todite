@@ -3,15 +3,15 @@ import React from 'react';
 import Head from 'next/head';
 
 interface MetaDataProps {
-    page: 'about' | 'sign-in' | 'sign-up' | 'todos' | 'settings' | 'api-key' | 'api-docs' | 'contributors' | '404';
+    page: 'about' | 'sign-in' | 'sign-up' | 'todos' | 'settings' | 'api-key' | 'api-docs' | 'contributors' | 'fallback' | '404';
     apiPage?: 'rest' | 'npm' | 'cli';
-    apiVersion?: 'v1' | 'v0.1';
+    apiVersion?: 'v1' | 'v0.1' | 'v1.0';
 }
 
 const MetaData = ({ page, apiPage, apiVersion }: MetaDataProps) => {
     let title: string;
     if (page === 'about' || page === 'todos') {
-        title = 'Todite | Organize your day';
+        title = 'Todite | Organise your day';
     } else if (page === 'sign-in' || page === 'sign-up') {
         title = `Todite | Sign ${page === 'sign-in' ? 'In' : 'Up'}`;
     } else if (page === 'api-docs') {
@@ -28,6 +28,8 @@ const MetaData = ({ page, apiPage, apiVersion }: MetaDataProps) => {
         title = 'Todite | Contributors';
     } else if (page === 'settings') {
         title = 'Todite | Settings';
+    } else if (page === 'fallback') {
+        title = 'Todite | Offline';
     } else {
         title = 'Todite | 404 Not Found';
     }
@@ -45,6 +47,8 @@ const MetaData = ({ page, apiPage, apiVersion }: MetaDataProps) => {
         description = 'See a list of all of the people who made Todite possible';
     } else if (page === 'settings') {
         description = 'Update your settings for the Todite app';
+    } else if (page === 'fallback') {
+        description = "The Todite fallback page for when you don't have internet.";
     } else {
         description = 'The Todite 404 not found error page';
     }

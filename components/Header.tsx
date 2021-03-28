@@ -1,9 +1,9 @@
 import React from 'react';
 
 interface HeaderProps {
-    page: 'about' | 'todos' | 'sign-in' | 'sign-up' | 'settings' | 'api-key' | 'api-docs' | 'contributors' | '404';
+    page: 'about' | 'todos' | 'sign-in' | 'sign-up' | 'settings' | 'api-key' | 'api-docs' | 'contributors' | 'fallback' | '404';
     apiPage?: 'rest' | 'npm' | 'cli';
-    apiVersion?: 'v1' | 'v0.1';
+    apiVersion?: 'v1' | 'v0.1' | 'v1.0';
 }
 
 const Header = ({ page, apiPage, apiVersion }: HeaderProps): React.ReactElement<{
@@ -29,6 +29,8 @@ const Header = ({ page, apiPage, apiVersion }: HeaderProps): React.ReactElement<
         title = 'Todite Contributors';
     } else if (page === 'settings') {
         title = 'Settings';
+    } else if (page === 'fallback') {
+        title = 'Offline';
     } else {
         title = '404 Not Found';
     }
