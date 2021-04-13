@@ -23,7 +23,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     let hasApiKey = req.query.api_key != null || req.query.apikey != null || req.query.apiKey != null || req.query.ApiKey != null || req.query.APIkey != null || req.query.APIKey != null || req.query.APIKEY != null || req.query['api-key'] != null;
     let hasToken = req.headers.authorization != null;
     if (!hasApiKey && !hasToken) {
-        return res.status(400).json({ error: { status: 400, message: 'api_key query parameter must be defined.' } });
+        res.status(400).json({ error: { status: 400, message: 'api_key query parameter must be defined.' } });
+        return await userConnection.close();
     }
 
 
@@ -36,7 +37,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
         firebaseId = hasToken ? await admin.auth().verifyIdToken(token!).then(decodedToken => decodedToken.uid) : undefined;
     } catch {
-        return res.status(400).json({ error: { status: 400, message: 'Invalid Authorization token' } });
+        res.status(400).json({ error: { status: 400, message: 'Invalid Authorization token' } });
+        return await userConnection.close();
     }
 
     if (method === 'GET') {
@@ -46,8 +48,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
             const { _id, firebaseId: uid, settings } = user;
             res.json({ _id, uid, settings });
+            return await userConnection.close();
         } catch (err) {
             res.status(404).json({ error: { status: 404, message: 'The user could not be found' } });
+            return await userConnection.close();
         }
     } else if (['PUT', 'PATCH'].includes(method)) {
         let { settings }: {
@@ -55,7 +59,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         } = req.body;
 
         if (!settings) {
-            return res.status(400).json({ error: { status: 400, message: 'settings must be defined' } });
+            res.status(400).json({ error: { status: 400, message: 'settings must be defined' } });
+            return await userConnection.close();
         }
         if (!settings.syncSettings) settings = undefined;
 
@@ -63,21 +68,29 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             const user = await User.findOne(hasApiKey ? { apiKey } : { firebaseId });
             if (user == null) throw new Error('User not found');
 
-            if (apiKey === '00000000-0000-0000-0000-000000000000') return res.json({ ...user, settings });
+            if (apiKey === '00000000-0000-0000-0000-000000000000') {
+                res.json({ ...user, settings });
+                return await userConnection.close();
+            }
             
             user.settings = settings;
             const updatedUser = await user.save();
 
             res.json(updatedUser);
+            return await userConnection.close();
         } catch (err) {
             res.status(404).json({ error: { status: 404, message: 'The user could not be found' } });
+            return await userConnection.close();
         }
     } else if (method === 'DELETE') {
         try {
             const user = await User.findOne(hasApiKey ? { apiKey } : { firebaseId });
             if (user == null) throw new Error('User not found');
 
-            if (apiKey === '00000000-0000-0000-0000-000000000000') return res.json({ success: true });
+            if (apiKey === '00000000-0000-0000-0000-000000000000') {
+                res.json({ success: true });
+                return await userConnection.close();
+            }
 
             const url = `${process.env.NODE_ENV === 'production' ? 'https://todite.vercel.app' : 'http://localhost:3000'}/api/v1/todo`;
 
@@ -101,9 +114,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
             await user.delete();
 
-            return res.json({ success: true });
+            res.json({ success: true });
+            return await userConnection.close();
         } catch (err) {
             res.status(404).json({ error: { status: 404, message: 'The user could not be found' } });
+            return await userConnection.close();
         }
     } else if (method === 'POST') {
         let settings: Settings | undefined = req.body.settings;
@@ -133,9 +148,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         });
 
         res.json(user);
+        return await userConnection.close();
     } else {
         res.setHeader('Access-Control-Allow-Methods', ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']);
         res.status(405).json({ error: { status: 405, message: 'Please use either "GET", "POST", "PUT", "PATCH", or "DELETE"' } });
+        return await userConnection.close();
     }
 };
 
