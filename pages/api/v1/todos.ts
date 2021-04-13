@@ -19,7 +19,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     let hasApiKey = req.query.api_key != null || req.query.apikey != null || req.query.apiKey != null || req.query.ApiKey != null || req.query.APIkey != null || req.query.APIKey != null || req.query.APIKEY != null || req.query['api-key'] != null;
     let hasToken = req.headers.authorization != null;
     if (!hasApiKey && !hasToken) {
-        return res.status(400).json({ error: { status: 400, message: 'api_key query parameter must be defined.' } });
+        res.status(400).json({ error: { status: 400, message: 'api_key query parameter must be defined.' } });
+        return await todoConnection.close();
     }
 
 
@@ -60,11 +61,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                     }
                 }) => ({ uid: user.uid, error: user.error }));
     } catch {
-        return res.status(400).json({ error: { status: 400, message: 'Invalid Authorization token' } });
+        res.status(400).json({ error: { status: 400, message: 'Invalid Authorization token' } });
+        return await todoConnection.close();
     }
 
     if (user.error || !userExists) {
-        return res.status(403).json({ error: { status: 403, message: 'Invalid API Key' } });
+        res.status(403).json({ error: { status: 403, message: 'Invalid API Key' } });
+        return await todoConnection.close();
     }
     const { uid } = user;
 
@@ -72,6 +75,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         const todos = await Todo.find({ user: uid });
 
         res.json(todos);
+        return await todoConnection.close();
     } else if (method === 'POST') {
         const { name, completed = false, date }: {
             name?: string;
@@ -80,16 +84,22 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         } = req.body;
 
         if (name == null) {
-            return res.status(400).json({ error: { status: 400, message: 'name must be defined' } })
+            res.status(400).json({ error: { status: 400, message: 'name must be defined' } })
+            return await todoConnection.close();
         }
 
-        if (apiKey === '00000000-0000-0000-0000-000000000000') return res.json({ _id: mongoose.Types.ObjectId(), name, completed, user: uid, date, __v: 0 });
+        if (apiKey === '00000000-0000-0000-0000-000000000000') {
+            res.json({ _id: mongoose.Types.ObjectId(), name, completed, user: uid, date, __v: 0 });
+            return await todoConnection.close();
+        }
 
         const newTodo = await Todo.create({ name, completed, user: uid, date });
         res.status(201).json(newTodo);
+        return await todoConnection.close();
     } else {
         res.setHeader('Access-Control-Allow-Methods', ['GET', 'POST']);
         res.status(405).json({ error: { status: 405, message: 'Please use either "GET" or "POST"' } });
+        return await todoConnection.close();
     }
 };
 

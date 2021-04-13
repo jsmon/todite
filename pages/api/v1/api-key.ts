@@ -20,7 +20,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     let hasApiKey = req.query.api_key != null || req.query.apikey != null || req.query.apiKey != null || req.query.ApiKey != null || req.query.APIkey != null || req.query.APIKey != null || req.query.APIKEY != null || req.query['api-key'] != null;
     let hasToken = req.headers.authorization != null;
     if (!hasApiKey && !hasToken) {
-        return res.status(400).json({ error: { status: 400, message: 'api_key query parameter must be defined.' } });
+        res.status(400).json({ error: { status: 400, message: 'api_key query parameter must be defined.' } });
+        return await userConnection.close();
     }
 
 
@@ -34,11 +35,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
         firebaseId = hasToken ? await admin.auth().verifyIdToken(token!).then(decodedToken => decodedToken.uid) : undefined;
     } catch {
-        return res.status(400).json({ error: { status: 400, message: 'Invalid Authorization token' } });
+        res.status(400).json({ error: { status: 400, message: 'Invalid Authorization token' } });
+        return await userConnection.close();
     }
 
     if (method === 'GET') {
-        if (hasApiKey) return res.json({ apiKey });
+        if (hasApiKey) {
+            res.json({ apiKey });
+            return await userConnection.close();
+        }
 
         try {
             const user = await User.findOne({ firebaseId });
@@ -48,8 +53,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             }
 
             res.json({ apiKey: user.apiKey });
+            return await userConnection.close();
         } catch (err) {
             res.status(404).json({ error: { status: 404, message: 'The user could not be found' } });
+            return await userConnection.close();
         }
     } else if (['PUT', 'PATCH'].includes(method)) {
         if (apiKey === '00000000-0000-0000-0000-000000000000') return res.json({ apiKey });
@@ -63,12 +70,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             await user.updateOne({ apiKey: newApiKey });
 
             res.json({ apiKey: newApiKey });
+            return await userConnection.close();
         } catch (err) {
             res.status(404).json({ error: { status: 404, message: 'The user could not be found' } });
+            return await userConnection.close();
         }
     } else {
         res.setHeader('Access-Control-Allow-Methods', ['GET', 'PUT', 'PATCH']);
         res.status(405).json({ error: { status: 405, message: 'Please use either "GET", "PUT", or "PATCH"' } });
+        return await userConnection.close();
     }
 };
 
