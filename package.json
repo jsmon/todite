@@ -39,7 +39,7 @@
     "firebase": "^8.6.2",
     "firebase-admin": "^9.8.0",
     "mongoose": "^5.12.11",
-    "next": "^10.2.3",
+    "next": "^11.1.0",
     "next-pwa": "^5.2.21",
     "react": "^17.0.2",
     "react-datepicker": "^3.8.0",
